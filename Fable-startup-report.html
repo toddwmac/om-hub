@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startup Decade Report: 2015–2025</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0b1020; --panel:#141b31; --panel2:#1b2442; --ink:#e8ecf8; --muted:#9aa7c7;
+    --accent:#5eead4; --accent2:#818cf8; --warn:#fb7185; --gold:#fbbf24;
+    --radius:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--ink); line-height:1.6;}
+  header{padding:48px 24px 24px; text-align:center; background:radial-gradient(ellipse at top,#1e2a52 0%,var(--bg) 70%);}
+  header h1{font-size:clamp(1.6rem,4vw,2.6rem); letter-spacing:-.02em;}
+  header p{color:var(--muted); max-width:760px; margin:12px auto 0;}
+  .badge{display:inline-block; background:var(--panel2); color:var(--accent); font-size:.75rem; padding:4px 12px; border-radius:999px; margin-bottom:14px; letter-spacing:.12em; text-transform:uppercase;}
+  nav{position:sticky; top:0; z-index:10; display:flex; justify-content:center; gap:8px; flex-wrap:wrap; padding:14px; background:rgba(11,16,32,.92); backdrop-filter:blur(8px); border-bottom:1px solid #22305a;}
+  nav button{background:var(--panel); color:var(--muted); border:1px solid #26335e; padding:10px 18px; border-radius:999px; cursor:pointer; font-size:.9rem; transition:.2s;}
+  nav button:hover{color:var(--ink); border-color:var(--accent2);}
+  nav button.active{background:linear-gradient(135deg,#2b3a72,#233).9; color:var(--ink); border-color:var(--accent); box-shadow:0 0 18px rgba(94,234,212,.15);}
+  main{max-width:1080px; margin:0 auto; padding:32px 20px 80px;}
+  section{display:none; animation:fade .35s ease;}
+  section.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+  h2{font-size:1.6rem; margin-bottom:6px;}
+  .sub{color:var(--muted); margin-bottom:24px;}
+  .grid{display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); margin-bottom:24px;}
+  .stat{background:var(--panel); border:1px solid #24315c; border-radius:var(--radius); padding:20px;}
+  .stat .num{font-size:2rem; font-weight:700; color:var(--accent);}
+  .stat.alt .num{color:var(--accent2);}
+  .stat.warn .num{color:var(--warn);}
+  .stat.gold .num{color:var(--gold);}
+  .stat .lbl{color:var(--muted); font-size:.85rem; margin-top:4px;}
+  .card{background:var(--panel); border:1px solid #24315c; border-radius:var(--radius); padding:24px; margin-bottom:22px;}
+  .card h3{margin-bottom:10px; color:var(--accent);}
+  .card.alt h3{color:var(--accent2);}
+  .chart-wrap{position:relative; height:340px;}
+  ul.insights{list-style:none; margin-top:10px;}
+  ul.insights li{padding:10px 0 10px 26px; position:relative; border-bottom:1px dashed #26335e; color:#c9d4ee;}
+  ul.insights li:last-child{border-bottom:none;}
+  ul.insights li::before{content:"▸"; position:absolute; left:4px; color:var(--accent);}
+  .two-col{display:grid; gap:22px; grid-template-columns:1fr; }
+  @media(min-width:880px){.two-col{grid-template-columns:1fr 1fr;}}
+  .skill{background:var(--panel2); border-radius:12px; padding:16px 18px; margin-bottom:12px; border-left:4px solid var(--accent);}
+  .skill.renew{border-left-color:var(--gold);}
+  .skill h4{font-size:1rem;}
+  .skill p{font-size:.88rem; color:var(--muted);}
+  .tag{font-size:.65rem; text-transform:uppercase; letter-spacing:.1em; padding:2px 8px; border-radius:999px; margin-left:8px; vertical-align:middle;}
+  .tag.e{background:rgba(94,234,212,.15); color:var(--accent);}
+  .tag.r{background:rgba(251,191,36,.15); color:var(--gold);}
+  footer, .sources{color:var(--muted); font-size:.82rem;}
+  .sources{background:var(--panel); border:1px solid #24315c; border-radius:var(--radius); padding:22px; margin-top:30px;}
+  .sources a{color:var(--accent2); text-decoration:none;}
+  .sources a:hover{text-decoration:underline;}
+  .note{font-size:.78rem; color:var(--muted); margin-top:10px; font-style:italic;}
+  footer{text-align:center; padding:24px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Interactive Research Report</div>
+  <h1>The Startup Decade: 2015–2025</h1>
+  <p>How AI reshaped the venture ecosystem, why startups actually fail, and which founder skills now command a premium in the VC landscape.</p>
+</header>
+
+<nav>
+  <button class="active" data-tab="overview">Overview</button>
+  <button data-tab="ai">1 · AI & the Ecosystem</button>
+  <button data-tab="failures">2 · Why Startups Fail</button>
+  <button data-tab="skills">3 · Founder Skills</button>
+</nav>
+
+<main>
+
+  <!-- ============ OVERVIEW ============ -->
+  <section id="overview" class="active">
+    <h2>A Decade of Whiplash</h2>
+    <p class="sub">Steady growth → pandemic surge → 2021 mania → correction ("VC winter") → AI-led rebound.</p>
+    <div class="grid">
+      <div class="stat"><div class="num">$643B</div><div class="lbl">Record global venture funding in 2021 — roughly 10x the 2012 total of &lt;$59B (Crunchbase)</div></div>
+      <div class="stat alt"><div class="num">52.5%</div><div class="lbl">Share of all global VC dollars captured by AI startups in 2025 (PitchBook)</div></div>
+      <div class="stat warn"><div class="num">70%</div><div class="lbl">Of post-2023 VC-backed shutdowns cite "ran out of capital" — usually the symptom, not the disease (CB Insights)</div></div>
+      <div class="stat gold"><div class="num">67%</div><div class="lbl">Of VCs rank founder "ability" as the #1 attribute they underwrite (Gompers et al.)</div></div>
+    </div>
+    <div class="card">
+      <h3>Global Venture Funding, ~2015–2025 (USD Billions)</h3>
+      <div class="chart-wrap"><canvas id="decadeChart"></canvas></div>
+      <p class="note">Approximate annual totals compiled from Crunchbase, PitchBook, and Deutsche Bank Wealth reporting. 2021 is widely viewed as an anomaly; 2025 was the strongest year since 2021, driven overwhelmingly by AI mega-rounds.</p>
+    </div>
+    <div class="card alt">
+      <h3>Three Structural Shifts This Report Tracks</h3>
+      <ul class="insights">
+        <li><strong>Capital concentration:</strong> Rounds under $50M fell from ~72% of VC dollars (2010) to ~47% (2015) to ~38% (2024). Mega-rounds now dominate.</li>
+        <li><strong>Sector concentration:</strong> AI's 50%+ share of funding exceeds any prior wave — dot-com (~39%), mobile (~31%), crypto (~22%).</li>
+        <li><strong>Selectivity:</strong> Fewer, larger deals; a "barbell" market where AI-capable companies raise easily while others face a funding drought.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ AI ============ -->
+  <section id="ai">
+    <h2>1 · How AI Is Rewiring the Startup Ecosystem</h2>
+    <p class="sub">From ~25% of venture dollars in 2023 to majority share by 2025 — the fastest sector capture in VC history.</p>
+    <div class="grid">
+      <div class="stat"><div class="num">$192.7B</div><div class="lbl">Invested in AI startups in 2025, out of $366.8B total global VC (PitchBook)</div></div>
+      <div class="stat alt"><div class="num">62.7%</div><div class="lbl">Of all US venture capital absorbed by AI companies in Q3 2025</div></div>
+      <div class="stat gold"><div class="num">+42%</div><div class="lbl">Seed valuation premium for AI startups vs. non-AI peers</div></div>
+      <div class="stat warn"><div class="num">85%</div><div class="lbl">Of global AI funding concentrated in the US market</div></div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h3>AI Share of Global VC Funding (%)</h3>
+        <div class="chart-wrap"><canvas id="aiShareChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Peak Sector Share, Wave vs. Wave (%)</h3>
+        <div class="chart-wrap"><canvas id="waveChart"></canvas></div>
+      </div>
+    </div>
+    <div class="card alt">
+      <h3>Ecosystem Effects — Beyond the Funding Numbers</h3>
+      <ul class="insights">
+        <li><strong>The barbell market:</strong> Strong, often AI-driven companies attract abundant capital while nearly everyone else struggles — a stark bifurcation of the opportunity set.</li>
+        <li><strong>Mega-round economics:</strong> Single rounds (e.g., Anthropic's ~$13B Series F) now exceed what entire national ecosystems once raised annually.</li>
+        <li><strong>Non-AI funding drought:</strong> With majority share flowing to one paradigm, non-AI startups compete for a shrinking pool and face longer cycles and higher bars.</li>
+        <li><strong>Corporate gravity:</strong> Megacap tech is committing hundreds of billions to AI infrastructure — creating partnership and acquisition openings, but also raising the competitive bar for startups in incumbent-dominated categories.</li>
+        <li><strong>Physical AI & infrastructure:</strong> Enthusiasm is spreading beyond software into chips, robotics, and autonomy, with landmark AI-hardware IPOs validating the full stack.</li>
+        <li><strong>Cheaper building, pricier winning:</strong> AI tooling lets tiny teams ship faster with less capital — yet winners are expected to consume more capital than ever, pushing mega-rounds further.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ FAILURES ============ -->
+  <section id="failures">
+    <h2>2 · Why Startups Actually Fail</h2>
+    <p class="sub">A decade of post-mortem research converges on one lesson: cash-out is the symptom; market misfit is the disease.</p>
+    <div class="grid">
+      <div class="stat warn"><div class="num">43%</div><div class="lbl">Of post-2023 failures trace to poor product-market fit — the leading root cause (CB Insights, 431 shutdowns)</div></div>
+      <div class="stat"><div class="num">29%</div><div class="lbl">Cite bad timing / macro conditions — concentrated in climate, food & ag, and blockchain</div></div>
+      <div class="stat alt"><div class="num">~23%</div><div class="lbl">Involve founding-team conflict or leadership dysfunction</div></div>
+      <div class="stat gold"><div class="num">74%</div><div class="lbl">Of failed high-growth startups scaled prematurely (Startup Genome)</div></div>
+    </div>
+    <div class="card">
+      <h3>Cited Causes of Failure — VC-Backed Shutdowns Since 2023 (%)</h3>
+      <div class="chart-wrap"><canvas id="failChart"></canvas></div>
+      <p class="note">Companies cite multiple causes, so totals exceed 100%. Source: CB Insights analysis of 431 VC-backed shutdowns in the post-zero-interest-rate shakeout.</p>
+    </div>
+    <div class="card alt">
+      <h3>How the Story Changed Over the Decade</h3>
+      <ul class="insights">
+        <li><strong>Mid-2010s framing:</strong> The classic CB Insights post-mortem study put "no market need" first (~42%), "ran out of cash" second (~29%), and "not the right team" third.</li>
+        <li><strong>Post-2022 reframing:</strong> Newer analysis flips the lens — 70% "ran out of capital," but that's the final cause of death; PMF, timing, and unit economics explain <em>why</em> the capital dried up.</li>
+        <li><strong>The ZIRP hangover:</strong> Sectors that raised heavily in 2021–22 on trends that never materialized (alt-protein, NFTs, some climate plays) drove a disproportionate share of shutdowns.</li>
+        <li><strong>Unit economics matter again:</strong> Unsustainable economics (~19% of failures) reflect the era's shift from growth-at-all-costs to efficiency.</li>
+        <li><strong>Perennials:</strong> Ignoring user feedback, tunnel vision, weak go-to-market, mispricing, and founder discord recur across every era's data.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section id="skills">
+    <h2>3 · Founder Skills Rising to the Top</h2>
+    <p class="sub">What VCs underwrite hasn't changed at the core — but the AI era and the post-2022 correction re-weighted the scorecard. <span class="tag e">Emerging</span> <span class="tag r">Renewing</span></p>
+    <div class="card">
+      <h3>What VCs Say They Value in Founders (% of VCs Citing, Gompers et al.)</h3>
+      <div class="chart-wrap"><canvas id="skillChart"></canvas></div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="skill"><h4>AI-Native Fluency <span class="tag e">Emerging</span></h4>
+          <p>Deep, working knowledge of AI gives founders enormous leverage. Investors increasingly favor companies architected around AI from day one — not retrofitted.</p></div>
+        <div class="skill"><h4>Capital Efficiency & "Cockroach Mode" <span class="tag e">Emerging</span></h4>
+          <p>With a high funding bar and long cycles, founders who hit milestones on lean budgets — and survive between rounds — stand out.</p></div>
+        <div class="skill"><h4>Distribution & Go-To-Market Craft <span class="tag e">Emerging</span></h4>
+          <p>As AI collapses the cost of building product, defensibility shifts to distribution, positioning, and speed to revenue — weak GTM is a top documented failure cause.</p></div>
+        <div class="skill"><h4>Data/Evidence-Driven Storytelling <span class="tag e">Emerging</span></h4>
+          <p>In a selective market, traction signals — revenue, adoption, retention — must be woven into a compelling, credible narrative.</p></div>
+      </div>
+      <div>
+        <div class="skill renew"><h4>Execution Ability <span class="tag r">Renewing</span></h4>
+          <p>The single most-cited attribute (67% of VCs). Demonstrated capacity to turn ideas into shipped, adopted product is the core underwrite.</p></div>
+        <div class="skill renew"><h4>Domain Expertise <span class="tag r">Renewing</span></h4>
+          <p>Valued by 60% of VCs; experienced domain-specific founders significantly outperform first-timers on long-term survival.</p></div>
+        <div class="skill renew"><h4>Coachability & Adaptability <span class="tag r">Renewing</span></h4>
+          <p>Openness to feedback and willingness to pivot — the inability to adapt strategy to market signals kills even well-funded companies.</p></div>
+        <div class="skill renew"><h4>Resilience, Grit & Leadership <span class="tag r">Renewing</span></h4>
+          <p>Investors now explicitly assess grit, team-building, and culture-setting; leadership is treated as the defining differentiator when technologies look comparable.</p></div>
+      </div>
+    </div>
+    <div class="card alt">
+      <h3>The Net-Net for Founders</h3>
+      <ul class="insights">
+        <li>The bet is still on the person: markets shift and products pivot, but founder character and capability determine outcomes.</li>
+        <li>Passion is table stakes (54% of VCs cite it) — obsession plus evidence of execution wins the meeting.</li>
+        <li>Complementary founding teams beat solo generalists: identify your "spikes" and hire around your gaps.</li>
+        <li>In 2025's market: be AI-literate, be lean, show traction, and prove you can lead through storms.</li>
+      </ul>
+    </div>
+    <div class="sources">
+      <strong>Primary sources & further reading:</strong><br>
+      CB Insights — Why Startups Fail (431 post-mortems) · PitchBook / Bloomberg — 2025 AI funding share · Crunchbase — decade funding data & 2021 recap · OECD — VC investments in AI through 2025 · Bain & Company — Global VC snapshot · Wellington Management (Harvard Law Corp. Gov. Forum) — VC Outlook 2026 · Gompers, Gornall, Kaplan & Strebulaev (2020) — How Do VCs Make Decisions? · Startup Genome — premature scaling research · Failory — startup failure interviews.
+      <p class="note">All figures are approximations compiled from public reporting; methodologies differ across data providers.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>Startup Decade Report · Compiled July 2026 · Single-page application, no external data calls (charts render locally).</footer>
+
+<script>
+  // ---- Tab navigation ----
+  const tabs = document.querySelectorAll('nav button');
+  tabs.forEach(btn => btn.addEventListener('click', () => {
+    tabs.forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('main section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }));
+
+  // ---- Chart defaults ----
+  Chart.defaults.color = '#9aa7c7';
+  Chart.defaults.borderColor = 'rgba(154,167,199,.15)';
+  Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+  const teal='#5eead4', indigo='#818cf8', rose='#fb7185', gold='#fbbf24';
+
+  // Decade funding (approximate, USD B)
+  new Chart(decadeChart, {
+    type:'bar',
+    data:{
+      labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
+      datasets:[{
+        label:'Global VC funding ($B, approx.)',
+        data:[175,180,220,300,295,335,643,445,285,315,367],
+        backgroundColor:ctx => ctx.dataIndex===6 ? 'rgba(251,113,133,.75)' : 'rgba(94,234,212,.55)',
+        borderRadius:6
+      }]
+    },
+    options:{maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>' ~$'+c.parsed.y+'B'+(c.dataIndex===6?' (record anomaly year)':'')}}},
+      scales:{y:{title:{display:true,text:'USD Billions'}}}}
+  });
+
+  // AI share of VC
+  new Chart(aiShareChart, {
+    type:'line',
+    data:{
+      labels:['2020','2021','2022','2023','2024','2025'],
+      datasets:[{
+        label:'AI share of global VC (%)',
+        data:[14,17,20,25,38,52.5],
+        borderColor:indigo, backgroundColor:'rgba(129,140,248,.18)',
+        fill:true, tension:.35, pointBackgroundColor:teal, pointRadius:5
+      }]
+    },
+    options:{maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{y:{min:0,max:70,ticks:{callback:v=>v+'%'}}}}
+  });
+
+  // Wave comparison
+  new Chart(waveChart, {
+    type:'bar',
+    data:{
+      labels:['Dot-com peak','Mobile peak','Crypto 2021 peak','AI 2025'],
+      datasets:[{data:[39,31,22,52.5],
+        backgroundColor:['rgba(154,167,199,.5)','rgba(154,167,199,.5)','rgba(154,167,199,.5)','rgba(94,234,212,.8)'],
+        borderRadius:6}]
+    },
+    options:{maintainAspectRatio:false, indexAxis:'y', plugins:{legend:{display:false}},
+      scales:{x:{max:60,ticks:{callback:v=>v+'%'}}}}
+  });
+
+  // Failure causes
+  new Chart(failChart, {
+    type:'bar',
+    data:{
+      labels:['Ran out of capital (final cause)','Poor product-market fit','Bad timing / macro conditions','Team conflict / leadership','Unsustainable unit economics'],
+      datasets:[{data:[70,43,29,23,19],
+        backgroundColor:['rgba(251,113,133,.8)','rgba(251,191,36,.8)','rgba(129,140,248,.8)','rgba(94,234,212,.8)','rgba(154,167,199,.7)'],
+        borderRadius:6}]
+    },
+    options:{maintainAspectRatio:false, indexAxis:'y', plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>' '+c.parsed.x+'% of shutdowns cite this'}}},
+      scales:{x:{max:80,ticks:{callback:v=>v+'%'}}}}
+  });
+
+  // Founder attributes
+  new Chart(skillChart, {
+    type:'bar',
+    data:{
+      labels:['Ability (execution)','Industry experience','Passion'],
+      datasets:[{data:[67,60,54],
+        backgroundColor:['rgba(94,234,212,.85)','rgba(129,140,248,.85)','rgba(251,191,36,.85)'],
+        borderRadius:8, barThickness:56}]
+    },
+    options:{maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>' Cited by '+c.parsed.y+'% of VCs'}}},
+      scales:{y:{max:80,ticks:{callback:v=>v+'%'}}}}
+  });
+</script>
+</body>
+</html>

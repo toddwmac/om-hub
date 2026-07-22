@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Ecosystem Report: 2016–2026 | AI, Failures &amp; Founder Skills</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: #0F172A;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .heading-font {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .section-header {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .nav-active {
+            color: #0F172A;
+            font-weight: 600;
+            border-bottom: 3px solid #0F172A;
+        }
+
+        .data-card {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .data-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+        }
+
+        .metric-value {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            font-feature-settings: "ss02";
+        }
+
+        .chart-container {
+            position: relative;
+        }
+
+        .report-container {
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .nav-link {
+            transition: all 0.1s ease;
+        }
+        
+        .nav-link:hover {
+            color: #334155;
+        }
+
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .insight-box {
+            background: linear-gradient(145deg, #f8fafc, #ffffff);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-slate-900 rounded-2xl flex items-center justify-center">
+                        <i class="fa-solid fa-chart-line text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-2xl tracking-tighter">StartupPulse</span>
+                        <span class="text-xs font-medium text-slate-500 tracking-[2px] block -mt-1">RESEARCH</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a href="#ai-impact" class="nav-link px-3 py-1.5 text-slate-600 hover:text-slate-900">AI Impact</a>
+                    <a href="#failures" class="nav-link px-3 py-1.5 text-slate-600 hover:text-slate-900">Failure Reasons</a>
+                    <a href="#skills" class="nav-link px-3 py-1.5 text-slate-600 hover:text-slate-900">Founder Skills</a>
+                </div>
+                
+                <div class="flex items-center gap-x-3">
+                    <div class="px-4 py-1.5 bg-white border border-slate-200 text-xs font-medium rounded-3xl flex items-center gap-x-2">
+                        <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                        <span class="font-semibold text-emerald-700">Updated Jan 2026</span>
+                    </div>
+                    <button onclick="window.print()" 
+                            class="px-5 py-2 text-sm font-semibold bg-slate-900 text-white rounded-3xl hover:bg-slate-800 transition-colors flex items-center gap-x-2">
+                        <i class="fa-solid fa-download text-xs"></i>
+                        <span>Export PDF</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="bg-slate-900 text-white">
+        <div class="max-w-screen-2xl mx-auto px-8 pt-16 pb-20">
+            <div class="max-w-3xl">
+                <div class="inline-flex items-center gap-x-2 px-4 py-1.5 rounded-3xl bg-white/10 text-xs font-medium mb-6">
+                    <span>2016 — 2026</span>
+                    <span class="w-px h-3 bg-white/30"></span>
+                    <span class="text-emerald-400">10-YEAR ANALYSIS</span>
+                </div>
+                
+                <h1 class="text-7xl font-bold tracking-tighter leading-none mb-4">
+                    The AI Era<br>Reshapes Startups
+                </h1>
+                <p class="max-w-md text-xl text-slate-300">
+                    Data-driven insights on how artificial intelligence is transforming the startup landscape, 
+                    why companies fail, and the new skills VCs are rewarding.
+                </p>
+                
+                <div class="flex items-center gap-x-4 mt-8">
+                    <a href="#ai-impact" 
+                       class="px-8 py-4 bg-white text-slate-900 font-semibold rounded-3xl flex items-center gap-x-3 hover:bg-slate-100 transition-colors">
+                        <span>Explore Findings</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <div class="text-sm text-slate-400">
+                        Based on 40+ sources including<br>Crunchbase, CB Insights &amp; PitchBook
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="max-w-screen-2xl mx-auto px-8 -mt-8 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 data-card">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="text-xs uppercase tracking-widest font-semibold text-slate-500">AI Funding Share</div>
+                        <div class="metric-value text-emerald-600">26%</div>
+                        <div class="text-sm text-slate-600">of global VC in 2025</div>
+                    </div>
+                    <i class="fa-solid fa-robot text-4xl text-emerald-100"></i>
+                </div>
+                <div class="mt-4 text-xs text-emerald-700 font-medium">↑ 28% YoY growth</div>
+            </div>
+            
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 data-card">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="text-xs uppercase tracking-widest font-semibold text-slate-500">AI Startups (US)</div>
+                        <div class="metric-value">4,643</div>
+                        <div class="text-sm text-slate-600">founded 2013–2022</div>
+                    </div>
+                    <i class="fa-solid fa-globe text-4xl text-blue-100"></i>
+                </div>
+                <div class="mt-4 text-xs text-blue-700 font-medium">Dominates global AI ecosystem</div>
+            </div>
+            
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 data-card">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="text-xs uppercase tracking-widest font-semibold text-slate-500">AI Valuation Premium</div>
+                        <div class="metric-value text-violet-600">42%</div>
+                        <div class="text-sm text-slate-600">higher than non-AI peers</div>
+                    </div>
+                    <i class="fa-solid fa-chart-line text-4xl text-violet-100"></i>
+                </div>
+                <div class="mt-4 text-xs text-violet-700 font-medium">Seed-stage advantage</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Impact Section -->
+    <div id="ai-impact" class="max-w-screen-2xl mx-auto px-8 pt-20">
+        <div class="flex items-end justify-between mb-8">
+            <div>
+                <span class="text-emerald-600 text-sm font-semibold tracking-wider">SECTION 01</span>
+                <h2 class="section-header">How AI is Reshaping the Startup Ecosystem</h2>
+            </div>
+            <div class="hidden md:block text-right text-sm text-slate-500 max-w-xs">
+                AI funding has grown nearly <span class="font-semibold text-slate-700">10×</span> in the past five years.
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-12 gap-6">
+            <!-- Left content -->
+            <div class="md:col-span-7 space-y-6">
+                <div class="prose max-w-none text-slate-700">
+                    <p class="text-lg">Over the last decade, AI has transitioned from a niche technology to the dominant force in venture capital. 
+                    AI startups now capture a disproportionate share of funding and attention.</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white border border-slate-200 rounded-3xl p-5">
+                        <div class="text-xs font-semibold text-slate-500 mb-1">2025 GLOBAL AI FUNDING</div>
+                        <div class="text-4xl font-bold">$107B</div>
+                        <div class="text-xs text-emerald-600 font-medium mt-1">+28% YoY</div>
+                        <div class="mt-3 text-xs text-slate-500">AI accounts for <span class="font-semibold">26%</span> of all VC dollars globally.</div>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-3xl p-5">
+                        <div class="text-xs font-semibold text-slate-500 mb-1">AI-NATIVE ECOSYSTEMS</div>
+                        <div class="text-4xl font-bold">8</div>
+                        <div class="mt-1 text-xs">Only eight global ecosystems direct ≥15% of funding to AI-first startups.</div>
+                        <div class="text-[10px] text-amber-600 mt-4">80% of AI funding concentrated in Silicon Valley, Beijing &amp; Paris.</div>
+                    </div>
+                </div>
+                
+                <div class="insight-box border border-slate-200 rounded-3xl p-6">
+                    <div class="flex items-center gap-x-3 mb-3">
+                        <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                        <span class="font-semibold text-sm">Key Insight</span>
+                    </div>
+                    <p class="text-sm text-slate-700">AI startups command a consistent <span class="font-semibold">28–42% valuation premium</span> across early stages. 
+                    Median Series A funding for AI companies reached $16M vs $7M for non-AI peers.</p>
+                </div>
+            </div>
+            
+            <!-- Chart -->
+            <div class="md:col-span-5 bg-white border border-slate-200 rounded-3xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <div class="font-semibold">AI vs Non-AI Funding Share</div>
+                        <div class="text-xs text-slate-500">2025 Global VC</div>
+                    </div>
+                </div>
+                <div class="chart-container" style="height: 240px;">
+                    <canvas id="aiFundingChart"></canvas>
+                </div>
+                <div class="flex justify-center gap-x-6 text-xs mt-4">
+                    <div class="flex items-center gap-x-2"><span class="w-3 h-3 bg-emerald-500 rounded-full"></span> <span>AI (26%)</span></div>
+                    <div class="flex items-center gap-x-2"><span class="w-3 h-3 bg-slate-300 rounded-full"></span> <span>Non-AI (74%)</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Failure Reasons Section -->
+    <div id="failures" class="max-w-screen-2xl mx-auto px-8 pt-16 pb-10">
+        <div class="flex items-end justify-between mb-8">
+            <div>
+                <span class="text-red-600 text-sm font-semibold tracking-wider">SECTION 02</span>
+                <h2 class="section-header">Primary Reasons for Startup Failures</h2>
+            </div>
+        </div>
+        
+        <div class="grid md:grid-cols-12 gap-6">
+            <div class="md:col-span-5">
+                <div class="bg-white border border-slate-200 rounded-3xl p-7">
+                    <h4 class="font-semibold mb-5 text-lg">Top Failure Factors (Last Decade)</h4>
+                    
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1.5">
+                                <span class="font-medium">No market need</span>
+                                <span class="font-mono text-red-600">42%</span>
+                            </div>
+                            <div class="h-2.5 bg-red-100 rounded-full overflow-hidden"><div class="h-2.5 w-[42%] bg-red-500 rounded-full"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1.5">
+                                <span class="font-medium">Ran out of cash</span>
+                                <span class="font-mono text-red-600">29%</span>
+                            </div>
+                            <div class="h-2.5 bg-red-100 rounded-full overflow-hidden"><div class="h-2.5 w-[29%] bg-red-500 rounded-full"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1.5">
+                                <span class="font-medium">Not the right team</span>
+                                <span class="font-mono text-red-600">23%</span>
+                            </div>
+                            <div class="h-2.5 bg-red-100 rounded-full overflow-hidden"><div class="h-2.5 w-[23%] bg-red-500 rounded-full"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1.5">
+                                <span class="font-medium">Competition / pricing issues</span>
+                                <span class="font-mono text-red-600">19%</span>
+                            </div>
+                            <div class="h-2.5 bg-red-100 rounded-full overflow-hidden"><div class="h-2.5 w-[19%] bg-red-500 rounded-full"></div></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-7 pt-6 border-t text-xs text-slate-500">
+                        Source: Aggregated from CB Insights annual reports (2016–2025)
+                    </div>
+                </div>
+            </div>
+            
+            <div class="md:col-span-7">
+                <div class="prose text-slate-700">
+                    <p>Despite the AI boom, core failure reasons have remained remarkably consistent over the past decade. 
+                    Lack of product-market fit continues to be the leading cause of death for startups.</p>
+                    
+                    <div class="mt-6 bg-amber-50 border border-amber-200 rounded-3xl p-6 text-sm">
+                        <div class="font-semibold text-amber-700 mb-2">AI-era nuance:</div>
+                        <p class="text-amber-800">Many AI startups are failing due to <span class="font-medium">over-reliance on hype</span> rather than solving real customer problems. 
+                        “AI-washing” and commoditized tools have led to rapid churn and weak retention.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emerging Skills Section -->
+    <div id="skills" class="max-w-screen-2xl mx-auto px-8 pt-8 pb-16">
+        <div class="flex items-end justify-between mb-8">
+            <div>
+                <span class="text-violet-600 text-sm font-semibold tracking-wider">SECTION 03</span>
+                <h2 class="section-header">Rising Founder Skills in the VC Landscape</h2>
+            </div>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Renewing skills -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-7">
+                <div class="flex items-center gap-x-3 mb-5">
+                    <div class="px-3 py-1 text-xs font-bold bg-violet-100 text-violet-700 rounded-2xl">RENEWING</div>
+                    <span class="font-semibold">Human + Strategic Skills</span>
+                </div>
+                
+                <div class="space-y-4 text-sm">
+                    <div class="flex gap-x-4">
+                        <div class="w-6 flex-shrink-0"><i class="fa-solid fa-users text-violet-500 mt-1"></i></div>
+                        <div>
+                            <div class="font-semibold">Leadership &amp; Strategic Thinking</div>
+                            <div class="text-xs text-slate-500">AI-exposed roles now require 7× more senior-level skills even at junior levels.</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-x-4">
+                        <div class="w-6 flex-shrink-0"><i class="fa-solid fa-heart text-violet-500 mt-1"></i></div>
+                        <div>
+                            <div class="font-semibold">Empathy, Judgment &amp; Creativity</div>
+                            <div class="text-xs text-slate-500">2.5× more likely to be required in AI-augmented roles.</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-x-4">
+                        <div class="w-6 flex-shrink-0"><i class="fa-solid fa-globe text-violet-500 mt-1"></i></div>
+                        <div>
+                            <div class="font-semibold">Vertical Domain Expertise</div>
+                            <div class="text-xs text-slate-500">Founders who deeply understand specific industries are winning.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Emerging skills -->
+            <div class="bg-white border border-slate-200 rounded-3xl p-7">
+                <div class="flex items-center gap-x-3 mb-5">
+                    <div class="px-3 py-1 text-xs font-bold bg-emerald-100 text-emerald-700 rounded-2xl">EMERGING</div>
+                    <span class="font-semibold">AI-Native Capabilities</span>
+                </div>
+                
+                <div class="space-y-4 text-sm">
+                    <div class="flex gap-x-4">
+                        <div class="w-6 flex-shrink-0"><i class="fa-solid fa-robot text-emerald-500 mt-1"></i></div>
+                        <div>
+                            <div class="font-semibold">AI Systems Thinking &amp; Prompt Engineering</div>
+                            <div class="text-xs text-slate-500">Ability to architect workflows with frontier models.</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-x-4">
+                        <div class="w-6 flex-shrink-0"><i class="fa-solid fa-database text-emerald-500 mt-1"></i></div>
+                        <div>
+                            <div class="font-semibold">Data Moat Building</div>
+                            <div class="text-xs text-slate-500">Owning proprietary datasets that big labs cannot replicate.</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-x-4">
+                        <div class="w-6 flex-shrink-0"><i class="fa-solid fa-bolt text-emerald-500 mt-1"></i></div>
+                        <div>
+                            <div class="font-semibold">Rapid Iteration &amp; Product Velocity</div>
+                            <div class="text-xs text-slate-500">Shipping AI features 5× faster than traditional teams.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6 text-xs text-center text-slate-500">
+            VCs increasingly favor founders who combine deep AI technical fluency with irreplaceable human judgment.
+        </div>
+    </div>
+
+    <!-- Footer / Sources -->
+    <div class="bg-white border-t border-slate-200 py-8">
+        <div class="max-w-screen-2xl mx-auto px-8 text-xs text-slate-500">
+            <div class="flex flex-wrap gap-x-6 gap-y-1">
+                <div>Sources: Startup Genome GSER 2026, Crunchbase, CB Insights, Bessemer Venture Partners, Menlo Ventures, PwC AI Jobs Barometer, Forbes Advisor, EdgeDelta.</div>
+            </div>
+            <div class="mt-4 text-[10px]">Data reflects trends through early 2026. This is an interactive research report generated for analysis purposes.</div>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#0F172A');
+        }
+        
+        // AI Funding Pie Chart
+        function createFundingChart() {
+            const ctx = document.getElementById('aiFundingChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['AI Startups', 'Non-AI Startups'],
+                    datasets: [{
+                        data: [26, 74],
+                        backgroundColor: ['#10b981', '#cbd5e1'],
+                        borderColor: ['#ffffff', '#ffffff'],
+                        borderWidth: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => context.label + ': ' + context.raw + '%'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Smooth scroll for nav links
+        function setupSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        }
+        
+        // Initialize everything
+        function init() {
+            initializeTailwind();
+            createFundingChart();
+            setupSmoothScroll();
+            
+            // Add subtle animation to metric cards
+            const cards = document.querySelectorAll('.data-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    card.style.transitionDelay = (index * 80) + 'ms';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 300);
+            });
+            
+            // Keyboard accessibility hint
+            console.log('%c[StartupPulse] Interactive research report initialized.', 'color:#64748b');
+        }
+        
+        window.onload = init;
+    </script>
+</body>
+</html>
