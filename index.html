@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OM Examples — Startup Reports</title>
+<title>OM Examples — Reports &amp; AI Showcases</title>
 <style>
   :root{
     --bg:#0b1020; --panel:#141b31; --panel2:#1b2442; --ink:#e8ecf8; --muted:#9aa7c7;
@@ -17,7 +17,7 @@
     min-height:100vh; display:flex; flex-direction:column;
   }
   header{
-    padding:72px 24px 40px; text-align:center;
+    padding:72px 24px 36px; text-align:center;
     background:radial-gradient(ellipse at top,#1e2a52 0%,var(--bg) 70%);
   }
   .badge{
@@ -26,16 +26,23 @@
     letter-spacing:.14em; text-transform:uppercase;
   }
   header h1{font-size:clamp(1.8rem,5vw,3rem); letter-spacing:-.02em; font-weight:700;}
-  header p{color:var(--muted); max-width:620px; margin:14px auto 0;}
+  header p{color:var(--muted); max-width:640px; margin:14px auto 0;}
   main{
-    max-width:920px; width:100%; margin:0 auto; padding:40px 20px 80px;
+    max-width:920px; width:100%; margin:0 auto; padding:28px 20px 70px;
+  }
+  .sec{ margin-top:28px; }
+  .sec:first-of-type{ margin-top:18px; }
+  .sec-head{ display:flex; align-items:baseline; gap:10px; margin:0 0 18px; }
+  .sec-head h2{ font-size:1.05rem; letter-spacing:.02em; }
+  .sec-head .count{ color:var(--muted); font-size:.78rem; }
+  .grid{
     display:grid; gap:22px; grid-template-columns:1fr;
   }
-  @media(min-width:760px){ main{ grid-template-columns:1fr 1fr; } }
+  @media(min-width:760px){ .grid{ grid-template-columns:1fr 1fr; } }
   .card{
     background:var(--panel); border:1px solid #24315c; border-radius:var(--radius);
-    padding:28px; text-decoration:none; color:inherit; transition:.25s;
-    display:flex; flex-direction:column;
+    padding:26px; text-decoration:none; color:inherit; transition:.25s;
+    display:flex; flex-direction:column; position:relative;
   }
   .card:hover{
     transform:translateY(-5px); border-color:var(--accent);
@@ -44,19 +51,25 @@
   .card .tag{
     align-self:flex-start; font-size:.68rem; text-transform:uppercase;
     letter-spacing:.12em; padding:4px 12px; border-radius:999px;
-    background:rgba(94,234,212,.15); color:var(--accent); margin-bottom:16px;
+    background:rgba(94,234,212,.15); color:var(--accent); margin-bottom:14px;
   }
   .card.alt .tag{ background:rgba(129,140,248,.15); color:var(--accent2); }
   .card.alt:hover{ border-color:var(--accent2); box-shadow:0 0 28px rgba(129,140,248,.14); }
-  .card h2{font-size:1.35rem; margin-bottom:8px;}
-  .card p{color:var(--muted); font-size:.92rem; flex:1;}
-  .card .go{
-    margin-top:18px; color:var(--accent); font-weight:600; font-size:.9rem;
-  }
+  .card.gold .tag{ background:rgba(251,191,36,.15); color:var(--gold); }
+  .card.gold:hover{ border-color:var(--gold); box-shadow:0 0 28px rgba(251,191,36,.14); }
+  .card.rose .tag{ background:rgba(251,113,133,.15); color:var(--warn); }
+  .card.rose:hover{ border-color:var(--warn); box-shadow:0 0 28px rgba(251,113,133,.14); }
+  .card h3{ font-size:1.2rem; margin-bottom:8px; padding-right:8px; }
+  .card p{ color:var(--muted); font-size:.9rem; flex:1; }
+  .creator{ color:var(--muted); font-size:.8rem; margin-top:12px; }
+  .creator b{ color:#c9d4ee; font-weight:600; }
+  .card .go{ margin-top:14px; color:var(--accent); font-weight:600; font-size:.88rem; }
   .card.alt .go{ color:var(--accent2); }
+  .card.gold .go{ color:var(--gold); }
+  .card.rose .go{ color:var(--warn); }
   footer{
     text-align:center; padding:28px; color:var(--muted); font-size:.82rem;
-    margin-top:auto;
+    margin-top:auto; border-top:1px solid #1b2442;
   }
   footer a{ color:var(--accent2); text-decoration:none; }
   footer a:hover{ text-decoration:underline; }
@@ -65,25 +78,50 @@
 <body>
   <header>
     <span class="badge">OM Examples</span>
-    <h1>Startup Ecosystem Reports</h1>
-    <p>A small collection of data-driven reports on the startup landscape. Choose a report below to open it.</p>
+    <h1>Reports &amp; AI Showcases</h1>
+    <p>A small gallery of data-driven reports and AI-generated pages. Every link opens in a new tab.</p>
   </header>
   <main>
-    <a class="card" href="Fable-startup-report.html">
-      <span class="tag">Fable</span>
-      <h2>Startup Decade Report</h2>
-      <p>Ten-year view of the startup world from 2015–2025, with charts on funding, failures, and founder skills.</p>
-      <span class="go">Open report →</span>
-    </a>
-    <a class="card alt" href="Grok-startup-report.html">
-      <span class="tag">Grok</span>
-      <h2>Startup Ecosystem Report</h2>
-      <p>The startup ecosystem across 2016–2026 — AI trends, company failures, and what founders need to succeed.</p>
-      <span class="go">Open report →</span>
-    </a>
+    <section class="sec">
+      <div class="sec-head"><h2>Startup Reports</h2><span class="count">hosted here</span></div>
+      <div class="grid">
+        <a class="card" href="Fable-startup-report.html" target="_blank" rel="noopener noreferrer">
+          <span class="tag">Fable</span>
+          <h3>Startup Decade Report</h3>
+          <p>Ten-year view of the startup world from 2015–2025, with charts on funding, failures, and founder skills.</p>
+          <span class="go">Open report &#8599;</span>
+        </a>
+        <a class="card alt" href="Grok-startup-report.html" target="_blank" rel="noopener noreferrer">
+          <span class="tag">Grok</span>
+          <h3>Startup Ecosystem Report</h3>
+          <p>The startup ecosystem across 2016–2026 — AI trends, company failures, and what founders need to succeed.</p>
+          <span class="go">Open report &#8599;</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><h2>AI Arena Showcases</h2><span class="count">external · model-generated</span></div>
+      <div class="grid">
+        <a class="card gold" href="https://019f8a0f-9862-7864-9943-ca8ccdfdfcf8.arena.site/" target="_blank" rel="noopener noreferrer">
+          <span class="tag">Qwen36-27b</span>
+          <h3>OpenAI Prompting Strategy Shift</h3>
+          <p>New vs. traditional prompting best practices.</p>
+          <span class="creator">Created by <b>Qwen36-27b</b> in Arena</span>
+          <span class="go">Open in new tab &#8599;</span>
+        </a>
+        <a class="card rose" href="https://019f8a0f-9862-7d23-b5d8-6c9aa3ee42f6.arena.site/" target="_blank" rel="noopener noreferrer">
+          <span class="tag">DeepSeek-v4</span>
+          <h3>OpenAI Prompting Guide 2025</h3>
+          <p>What's changed for 2025 and how to adapt.</p>
+          <span class="creator">Created by <b>DeepSeek-v4</b> in Arena</span>
+          <span class="go">Open in new tab &#8599;</span>
+        </a>
+      </div>
+    </section>
   </main>
   <footer>
-    Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>.
+    Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer">GitHub Pages</a>.
   </footer>
 </body>
 </html>
