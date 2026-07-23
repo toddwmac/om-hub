@@ -64,6 +64,15 @@
   .creator{ color:var(--muted); font-size:.8rem; margin-top:12px; }
   .creator b{ color:#c9d4ee; font-weight:600; }
   .note{ color:var(--muted); font-size:.78rem; margin-top:12px; font-style:italic; }
+  .actions{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+  .btn{ display:inline-block; padding:8px 14px; border-radius:999px; font-size:.8rem; font-weight:600; text-decoration:none; border:1px solid var(--accent); color:var(--accent); transition:.2s; }
+  .btn:hover{ background:rgba(94,234,212,.15); transform:translateY(-2px); }
+  .card.alt .btn{ border-color:var(--accent2); color:var(--accent2); }
+  .card.alt .btn:hover{ background:rgba(129,140,248,.15); }
+  .card.gold .btn{ border-color:var(--gold); color:var(--gold); }
+  .card.gold .btn:hover{ background:rgba(251,191,36,.15); }
+  .card.rose .btn{ border-color:var(--warn); color:var(--warn); }
+  .card.rose .btn:hover{ background:rgba(251,113,133,.15); }
   .card .go{ margin-top:14px; color:var(--accent); font-weight:600; font-size:.88rem; }
   .card.alt .go{ color:var(--accent2); }
   .card.gold .go{ color:var(--gold); }
@@ -83,6 +92,64 @@
     <p>A small gallery of data-driven reports, AI-generated pages, and research resources. Every link opens in a new tab.</p>
   </header>
   <main>
+    <section class="sec">
+      <div class="sec-head"><h2>AI Working Papers</h2><span class="count">papers · audio overviews</span></div>
+      <div class="grid">
+        <div class="card">
+          <span class="tag">Working Paper</span>
+          <h3>Adaption vs. Adoption</h3>
+          <p>An Applied AI Labs working paper on the difference between adopting AI tools and truly adapting how you work around them.</p>
+          <div class="actions">
+            <a class="btn" href="https://illuminate.google.com/library?play=Mg2w9b_Km3Y" target="_blank" rel="noopener noreferrer">Listen (Illuminate) &#8599;</a>
+            <a class="btn" href="https://centerforappliedailabs.github.io/resources/Adaption%20vs%20Adoption-AppliedAILabs.pdf" target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
+          </div>
+        </div>
+        <div class="card alt">
+          <span class="tag">Working Paper</span>
+          <h3>Adaptive Leadership in the AI Era</h3>
+          <p>Why AI transformation is an adaptive — not just technical — challenge. Covers distinguishing the two, systems thinking, and the human dynamics of change, with Cleveland Clinic, Netflix, and public-sector case studies.</p>
+          <div class="actions">
+            <a class="btn" href="https://notebooklm.google.com/notebook/277497e2-ba09-4e16-b0df-1491eebf3ed8/artifact/3f444bea-fd90-49ff-a5ba-1cb77838c4a0?utm_source=nlm_web_share&amp;utm_medium=google_oo&amp;utm_campaign=art_share_1&amp;utm_content=&amp;utm_smc=nlm_web_share_google_oo_art_share_1_" target="_blank" rel="noopener noreferrer">Listen (NotebookLM) &#8599;</a>
+            <a class="btn" href="https://centerforappliedai.com/wp-content/uploads/2025/11/Adaptive-Leadership-and-AI.pdf" target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
+          </div>
+        </div>
+        <div class="card gold">
+          <span class="tag">Working Paper</span>
+          <h3>Systems Thinking in the AI Era</h3>
+          <p>Mapping classic systems thinking — feedback loops, archetypes, boundaries, and leverage points — onto AI design, deployment, and governance.</p>
+          <div class="actions">
+            <a class="btn" href="https://toddwmac.github.io/ai-web-drop/Systems-Thinking-in-the-AI-Era.html" target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
+          </div>
+        </div>
+        <div class="card rose">
+          <span class="tag">Working Paper</span>
+          <h3>Emergent Properties of LLMs</h3>
+          <p>A leadership guide to the emergent, unpredictable behavior of Large Language Models — and the mindset shifts needed to harness them responsibly.</p>
+          <div class="actions">
+            <a class="btn" href="https://toddwmac.github.io/ai-web-drop/Emergent-Properties-of-LLMs.html" target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
+          </div>
+        </div>
+        <div class="card">
+          <span class="tag">Arena</span>
+          <h3>From Tool to Partner</h3>
+          <p>An Arena-built exploration of AI's shift from a tool we operate to a collaborative partner we work alongside.</p>
+          <div class="actions">
+            <a class="btn" href="https://019d9993-d720-7c5a-8b53-b664111285b9.arena.site/" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+          </div>
+        </div>
+        <div class="card alt">
+          <span class="tag">Working Paper</span>
+          <h3>The AI Mindset: Work and Family</h3>
+          <p>An Applied AI Labs working paper on cultivating an AI mindset across work and family life.</p>
+          <span class="note">Prepared using the debate format.</span>
+          <div class="actions">
+            <a class="btn" href="https://notebooklm.google.com/notebook/277497e2-ba09-4e16-b0df-1491eebf3ed8/artifact/d42e97be-f120-42a7-bf5d-45454aa8ea9b?utm_source=nlm_web_share&amp;utm_medium=google_oo&amp;utm_campaign=art_share_1&amp;utm_content=&amp;utm_smc=nlm_web_share_google_oo_art_share_1_" target="_blank" rel="noopener noreferrer">Listen (NotebookLM) &#8599;</a>
+            <a class="btn" href="https://centerforappliedailabs.github.io/resources/The%20AI%20Mindset%20-%20work%20and%20family-AppliedAILabs.pdf" target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="sec">
       <div class="sec-head"><h2>Startup Reports</h2><span class="count">hosted here</span></div>
       <div class="grid">
