@@ -4,11 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OM Hub — Examples &amp; Resources</title>
+<script>
+  // Progressive-enhancement flags + no-flash theme, set before CSS paints.
+  document.documentElement.classList.add('js');
+  (function () {
+    try {
+      var t = localStorage.getItem('omhub.theme') || 'dark'; /* dark is the default; a saved choice always wins */
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
 <style>
   :root{
     --bg:#0b1020; --panel:#141b31; --panel2:#1b2442; --ink:#e8ecf8; --muted:#9aa7c7;
     --accent:#5eead4; --accent2:#818cf8; --warn:#fb7185; --gold:#fbbf24;
+    --accent-rgb:94,234,212; --accent2-rgb:129,140,248; --warn-rgb:251,113,133; --gold-rgb:251,191,36;
+    --line:#24315c; --line2:#1b2442; --glow:#1e2a52; --strong:#c9d4ee;
     --radius:16px;
+  }
+  :root[data-theme="light"]{
+    --bg:#eceff6; --panel:#ffffff; --panel2:#e7ecf6; --ink:#16203b; --muted:#5a6a8a;
+    --accent:#0d9488; --accent2:#4f46e5; --warn:#e11d48; --gold:#b45309;
+    --accent-rgb:13,148,136; --accent2-rgb:79,70,229; --warn-rgb:225,29,72; --gold-rgb:180,83,9;
+    --line:#d7deec; --line2:#e4e9f3; --glow:#dde7fb; --strong:#1c2647;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
@@ -18,7 +38,7 @@
   }
   header{
     padding:72px 24px 36px; text-align:center;
-    background:radial-gradient(ellipse at top,#1e2a52 0%,var(--bg) 70%);
+    background:radial-gradient(ellipse at top,var(--glow) 0%,var(--bg) 70%);
   }
   .badge{
     display:inline-block; background:var(--panel2); color:var(--accent);
@@ -32,54 +52,94 @@
   }
   .sec{ margin-top:28px; }
   .sec:first-of-type{ margin-top:18px; }
-  .sec-head{ display:flex; align-items:baseline; gap:10px; margin:0 0 18px; }
+  .sec-head{
+    display:flex; align-items:center; gap:10px; margin:0 0 18px;
+    cursor:pointer; user-select:none;
+  }
+  .js .sec-head:focus-visible{ outline:2px solid var(--accent); outline-offset:5px; border-radius:6px; }
   .sec-head h2{ font-size:1.05rem; letter-spacing:.02em; }
   .sec-head .count{ color:var(--muted); font-size:.78rem; }
+  .sec-head .num{ color:var(--ink); font-weight:700; }
+  .chev{ display:none; color:var(--muted); font-size:1.6rem; line-height:1; transition:transform .2s; }
+  .js .chev{ display:inline-block; }
+  .js .sec.collapsed .chev{ transform:rotate(-90deg); }
   .grid{
     display:grid; gap:22px; grid-template-columns:1fr;
   }
   @media(min-width:760px){ .grid{ grid-template-columns:1fr 1fr; } }
+  .js .sec.collapsed .grid{ display:none; }
+  .toolbar{
+    display:none; gap:10px; flex-wrap:wrap; align-items:center;
+    margin:0 0 6px; padding:10px 14px; background:var(--panel);
+    border:1px solid var(--line); border-radius:12px; font-size:.8rem; color:var(--muted);
+  }
+  .js .toolbar{ display:flex; }
+  .toolbar button{
+    font:inherit; font-size:.78rem; font-weight:600; color:var(--ink);
+    background:var(--panel2); border:1px solid var(--line); border-radius:999px;
+    padding:6px 12px; cursor:pointer; transition:.2s;
+  }
+  .toolbar button:hover:not(:disabled){ border-color:var(--accent); color:var(--accent); }
+  .toolbar button:disabled{ opacity:.45; cursor:default; }
+  .toolbar #themeBtn{ font-size:.95rem; line-height:1; padding:6px 10px; }
+  .toolbar .note-status{ margin-left:auto; font-size:.76rem; }
   .card{
-    background:var(--panel); border:1px solid #24315c; border-radius:var(--radius);
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
     padding:26px; text-decoration:none; color:inherit; transition:.25s;
     display:flex; flex-direction:column; position:relative;
   }
   .card:hover{
     transform:translateY(-5px); border-color:var(--accent);
-    box-shadow:0 0 28px rgba(94,234,212,.12);
+    box-shadow:0 0 28px rgba(var(--accent-rgb),.12);
   }
   .card .tag{
     align-self:flex-start; font-size:.68rem; text-transform:uppercase;
     letter-spacing:.12em; padding:4px 12px; border-radius:999px;
-    background:rgba(94,234,212,.15); color:var(--accent); margin-bottom:14px;
+    background:rgba(var(--accent-rgb),.15); color:var(--accent); margin-bottom:14px;
   }
-  .card.alt .tag{ background:rgba(129,140,248,.15); color:var(--accent2); }
-  .card.alt:hover{ border-color:var(--accent2); box-shadow:0 0 28px rgba(129,140,248,.14); }
-  .card.gold .tag{ background:rgba(251,191,36,.15); color:var(--gold); }
-  .card.gold:hover{ border-color:var(--gold); box-shadow:0 0 28px rgba(251,191,36,.14); }
-  .card.rose .tag{ background:rgba(251,113,133,.15); color:var(--warn); }
-  .card.rose:hover{ border-color:var(--warn); box-shadow:0 0 28px rgba(251,113,133,.14); }
+  .card.alt .tag{ background:rgba(var(--accent2-rgb),.15); color:var(--accent2); }
+  .card.alt:hover{ border-color:var(--accent2); box-shadow:0 0 28px rgba(var(--accent2-rgb),.14); }
+  .card.gold .tag{ background:rgba(var(--gold-rgb),.15); color:var(--gold); }
+  .card.gold:hover{ border-color:var(--gold); box-shadow:0 0 28px rgba(var(--gold-rgb),.14); }
+  .card.rose .tag{ background:rgba(var(--warn-rgb),.15); color:var(--warn); }
+  .card.rose:hover{ border-color:var(--warn); box-shadow:0 0 28px rgba(var(--warn-rgb),.14); }
   .card h3{ font-size:1.2rem; margin-bottom:8px; padding-right:8px; }
   .card p{ color:var(--muted); font-size:.9rem; flex:1; }
   .creator{ color:var(--muted); font-size:.8rem; margin-top:12px; }
-  .creator b{ color:#c9d4ee; font-weight:600; }
+  .creator b{ color:var(--strong); font-weight:600; }
   .note{ color:var(--muted); font-size:.78rem; margin-top:12px; font-style:italic; }
   .actions{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
   .btn{ display:inline-block; padding:8px 14px; border-radius:999px; font-size:.8rem; font-weight:600; text-decoration:none; border:1px solid var(--accent); color:var(--accent); transition:.2s; }
-  .btn:hover{ background:rgba(94,234,212,.15); transform:translateY(-2px); }
+  .btn:hover{ background:rgba(var(--accent-rgb),.15); transform:translateY(-2px); }
   .card.alt .btn{ border-color:var(--accent2); color:var(--accent2); }
-  .card.alt .btn:hover{ background:rgba(129,140,248,.15); }
+  .card.alt .btn:hover{ background:rgba(var(--accent2-rgb),.15); }
   .card.gold .btn{ border-color:var(--gold); color:var(--gold); }
-  .card.gold .btn:hover{ background:rgba(251,191,36,.15); }
+  .card.gold .btn:hover{ background:rgba(var(--gold-rgb),.15); }
   .card.rose .btn{ border-color:var(--warn); color:var(--warn); }
-  .card.rose .btn:hover{ background:rgba(251,113,133,.15); }
-  .card .go{ margin-top:14px; color:var(--accent); font-weight:600; font-size:.88rem; }
-  .card.alt .go{ color:var(--accent2); }
-  .card.gold .go{ color:var(--gold); }
-  .card.rose .go{ color:var(--warn); }
+  .card.rose .btn:hover{ background:rgba(var(--warn-rgb),.15); }
+  /* per-item notes (JS only) */
+  .notebox{ display:none; margin-top:12px; }
+  .js .notebox{ display:block; }
+  .ntoggle-row{ text-align:right; }
+  .note-toggle{
+    display:inline-flex; align-items:center; gap:6px; font:inherit; font-size:.74rem;
+    color:var(--muted); background:transparent; border:0; cursor:pointer;
+    padding:0; opacity:.7; transition:.2s;
+  }
+  .note-toggle:hover{ color:var(--accent); opacity:1; }
+  .note-toggle.has{ opacity:1; }
+  .note-toggle .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); display:none; }
+  .note-toggle.has .dot{ display:inline-block; }
+  .note-area{ margin-top:8px; }
+  .note-area textarea{
+    width:100%; resize:vertical; font:inherit; font-size:.82rem; color:var(--ink);
+    background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:8px 10px;
+  }
+  .note-area textarea:focus{ outline:none; border-color:var(--accent); }
+  .vh{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
   footer{
     text-align:center; padding:28px; color:var(--muted); font-size:.82rem;
-    margin-top:auto; border-top:1px solid #1b2442;
+    margin-top:auto; border-top:1px solid var(--line2);
   }
   footer a{ color:var(--accent2); text-decoration:none; }
   footer a:hover{ text-decoration:underline; }
@@ -92,10 +152,22 @@
     <p>A small gallery of data-driven reports, AI-generated pages, and research resources. Every link opens in a new tab.</p>
   </header>
   <main>
-    <section class="sec">
-      <div class="sec-head"><h2>AI Working Papers</h2><span class="count">papers · audio overviews</span></div>
-      <div class="grid">
-        <div class="card">
+    <div class="toolbar" role="toolbar" aria-label="Page controls">
+      <button type="button" id="themeBtn" title="Switch theme">&#9728;</button>
+      <button type="button" id="expandAll">Expand all</button>
+      <button type="button" id="collapseAll">Collapse all</button>
+      <button type="button" id="exportNotes" disabled>Export notes (.md)</button>
+      <span class="note-status" id="noteStatus">0 notes</span>
+    </div>
+
+    <section class="sec" data-sec="working-papers">
+      <div class="sec-head" role="button" tabindex="0" aria-expanded="true" aria-controls="grid-working-papers">
+        <span class="chev" aria-hidden="true">&#9662;</span>
+        <h2>AI Working Papers</h2>
+        <span class="count"><b class="num">6</b> &#183; papers &#183; audio overviews</span>
+      </div>
+      <div class="grid" id="grid-working-papers">
+        <div class="card" data-id="adaption-vs-adoption">
           <span class="tag">Working Paper</span>
           <h3>Adaption vs. Adoption</h3>
           <p>An Applied AI Labs working paper on the difference between adopting AI tools and truly adapting how you work around them.</p>
@@ -103,8 +175,12 @@
             <a class="btn" href="https://illuminate.google.com/library?play=Mg2w9b_Km3Y" target="_blank" rel="noopener noreferrer">Listen (Illuminate) &#8599;</a>
             <a class="btn" href="https://centerforappliedailabs.github.io/resources/Adaption%20vs%20Adoption-AppliedAILabs.pdf" target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
           </div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="adaption-vs-adoption-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="adaption-vs-adoption-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
         </div>
-        <div class="card alt">
+        <div class="card alt" data-id="adaptive-leadership-ai-era">
           <span class="tag">Working Paper</span>
           <h3>Adaptive Leadership in the AI Era</h3>
           <p>Why AI transformation is an adaptive — not just technical — challenge. Covers distinguishing the two, systems thinking, and the human dynamics of change, with Cleveland Clinic, Netflix, and public-sector case studies.</p>
@@ -112,32 +188,48 @@
             <a class="btn" href="https://notebooklm.google.com/notebook/277497e2-ba09-4e16-b0df-1491eebf3ed8/artifact/3f444bea-fd90-49ff-a5ba-1cb77838c4a0?utm_source=nlm_web_share&amp;utm_medium=google_oo&amp;utm_campaign=art_share_1&amp;utm_content=&amp;utm_smc=nlm_web_share_google_oo_art_share_1_" target="_blank" rel="noopener noreferrer">Listen (NotebookLM) &#8599;</a>
             <a class="btn" href="https://centerforappliedai.com/wp-content/uploads/2025/11/Adaptive-Leadership-and-AI.pdf" target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
           </div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="adaptive-leadership-ai-era-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="adaptive-leadership-ai-era-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
         </div>
-        <div class="card gold">
+        <div class="card gold" data-id="systems-thinking-ai-era">
           <span class="tag">Working Paper</span>
           <h3>Systems Thinking in the AI Era</h3>
           <p>Mapping classic systems thinking — feedback loops, archetypes, boundaries, and leverage points — onto AI design, deployment, and governance.</p>
           <div class="actions">
             <a class="btn" href="https://toddwmac.github.io/ai-web-drop/Systems-Thinking-in-the-AI-Era.html" target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
           </div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="systems-thinking-ai-era-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="systems-thinking-ai-era-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
         </div>
-        <div class="card rose">
+        <div class="card rose" data-id="emergent-properties-llms">
           <span class="tag">Working Paper</span>
           <h3>Emergent Properties of LLMs</h3>
           <p>A leadership guide to the emergent, unpredictable behavior of Large Language Models — and the mindset shifts needed to harness them responsibly.</p>
           <div class="actions">
             <a class="btn" href="https://toddwmac.github.io/ai-web-drop/Emergent-Properties-of-LLMs.html" target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
           </div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="emergent-properties-llms-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="emergent-properties-llms-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
         </div>
-        <div class="card">
+        <div class="card" data-id="from-tool-to-partner">
           <span class="tag">Arena</span>
           <h3>From Tool to Partner</h3>
           <p>An Arena-built exploration of AI's shift from a tool we operate to a collaborative partner we work alongside.</p>
           <div class="actions">
             <a class="btn" href="https://019d9993-d720-7c5a-8b53-b664111285b9.arena.site/" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
           </div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="from-tool-to-partner-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="from-tool-to-partner-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
         </div>
-        <div class="card alt">
+        <div class="card alt" data-id="ai-mindset-work-family">
           <span class="tag">Working Paper</span>
           <h3>The AI Mindset: Work and Family</h3>
           <p>An Applied AI Labs working paper on cultivating an AI mindset across work and family life.</p>
@@ -146,93 +238,149 @@
             <a class="btn" href="https://notebooklm.google.com/notebook/277497e2-ba09-4e16-b0df-1491eebf3ed8/artifact/d42e97be-f120-42a7-bf5d-45454aa8ea9b?utm_source=nlm_web_share&amp;utm_medium=google_oo&amp;utm_campaign=art_share_1&amp;utm_content=&amp;utm_smc=nlm_web_share_google_oo_art_share_1_" target="_blank" rel="noopener noreferrer">Listen (NotebookLM) &#8599;</a>
             <a class="btn" href="https://centerforappliedailabs.github.io/resources/The%20AI%20Mindset%20-%20work%20and%20family-AppliedAILabs.pdf" target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
           </div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="ai-mindset-work-family-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="ai-mindset-work-family-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="sec">
-      <div class="sec-head"><h2>Startup Reports</h2><span class="count">hosted here</span></div>
-      <div class="grid">
-        <a class="card" href="Fable-startup-report.html" target="_blank" rel="noopener noreferrer">
+    <section class="sec collapsed" data-sec="startup-reports">
+      <div class="sec-head" role="button" tabindex="0" aria-expanded="false" aria-controls="grid-startup-reports">
+        <span class="chev" aria-hidden="true">&#9662;</span>
+        <h2>Startup Reports</h2>
+        <span class="count"><b class="num">2</b> &#183; hosted here</span>
+      </div>
+      <div class="grid" id="grid-startup-reports">
+        <div class="card" data-id="startup-decade-report">
           <span class="tag">Fable</span>
           <h3>Startup Decade Report</h3>
           <p>Ten-year view of the startup world from 2015–2025, with charts on funding, failures, and founder skills.</p>
-          <span class="go">Open report &#8599;</span>
-        </a>
-        <a class="card alt" href="Grok-startup-report.html" target="_blank" rel="noopener noreferrer">
+          <div class="actions"><a class="btn" href="Fable-startup-report.html" target="_blank" rel="noopener noreferrer">Open report &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="startup-decade-report-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="startup-decade-report-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
+        <div class="card alt" data-id="startup-ecosystem-report">
           <span class="tag">Grok</span>
           <h3>Startup Ecosystem Report</h3>
           <p>The startup ecosystem across 2016–2026 — AI trends, company failures, and what founders need to succeed.</p>
-          <span class="go">Open report &#8599;</span>
-        </a>
+          <div class="actions"><a class="btn" href="Grok-startup-report.html" target="_blank" rel="noopener noreferrer">Open report &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="startup-ecosystem-report-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="startup-ecosystem-report-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="sec">
-      <div class="sec-head"><h2>AI Arena Showcases</h2><span class="count">external · model-generated</span></div>
-      <div class="grid">
-        <a class="card gold" href="https://019f8a0f-9862-7864-9943-ca8ccdfdfcf8.arena.site/" target="_blank" rel="noopener noreferrer">
+    <section class="sec collapsed" data-sec="arena-showcases">
+      <div class="sec-head" role="button" tabindex="0" aria-expanded="false" aria-controls="grid-arena-showcases">
+        <span class="chev" aria-hidden="true">&#9662;</span>
+        <h2>AI Arena Showcases</h2>
+        <span class="count"><b class="num">2</b> &#183; external &#183; model-generated</span>
+      </div>
+      <div class="grid" id="grid-arena-showcases">
+        <div class="card gold" data-id="openai-prompting-strategy-shift">
           <span class="tag">Qwen36-27b</span>
           <h3>OpenAI Prompting Strategy Shift</h3>
           <p>New vs. traditional prompting best practices.</p>
           <span class="creator">Created by <b>Qwen36-27b</b> in Arena</span>
-          <span class="go">Open in new tab &#8599;</span>
-        </a>
-        <a class="card rose" href="https://019f8a0f-9862-7d23-b5d8-6c9aa3ee42f6.arena.site/" target="_blank" rel="noopener noreferrer">
+          <div class="actions"><a class="btn" href="https://019f8a0f-9862-7864-9943-ca8ccdfdfcf8.arena.site/" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="openai-prompting-strategy-shift-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="openai-prompting-strategy-shift-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
+        <div class="card rose" data-id="openai-prompting-guide-2025">
           <span class="tag">DeepSeek-v4</span>
           <h3>OpenAI Prompting Guide 2025</h3>
           <p>What's changed for 2025 and how to adapt.</p>
           <span class="creator">Created by <b>DeepSeek-v4</b> in Arena</span>
-          <span class="go">Open in new tab &#8599;</span>
-        </a>
+          <div class="actions"><a class="btn" href="https://019f8a0f-9862-7d23-b5d8-6c9aa3ee42f6.arena.site/" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="openai-prompting-guide-2025-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="openai-prompting-guide-2025-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="sec">
-      <div class="sec-head"><h2>Interesting Research and Analytics Resources</h2><span class="count">external · reading list</span></div>
-      <div class="grid">
-        <a class="card" href="https://artificialanalysis.ai/" target="_blank" rel="noopener noreferrer">
+    <section class="sec collapsed" data-sec="research-resources">
+      <div class="sec-head" role="button" tabindex="0" aria-expanded="false" aria-controls="grid-research-resources">
+        <span class="chev" aria-hidden="true">&#9662;</span>
+        <h2>Interesting Research and Analytics Resources</h2>
+        <span class="count"><b class="num">6</b> &#183; external &#183; reading list</span>
+      </div>
+      <div class="grid" id="grid-research-resources">
+        <div class="card" data-id="artificial-analysis">
           <span class="tag">Benchmarks</span>
           <h3>Artificial Analysis</h3>
           <p>Independent benchmarks and leaderboards comparing AI models and API providers on intelligence, price, speed, and latency.</p>
           <span class="note">Some great stats and analysis.</span>
-          <span class="go">Open in new tab &#8599;</span>
-        </a>
-        <a class="card alt" href="https://www.emergentmind.com/" target="_blank" rel="noopener noreferrer">
+          <div class="actions"><a class="btn" href="https://artificialanalysis.ai/" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="artificial-analysis-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="artificial-analysis-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
+        <div class="card alt" data-id="emergent-mind">
           <span class="tag">Research</span>
           <h3>Emergent Mind</h3>
           <p>Discover and learn new arXiv research fast — summaries, explainer videos, whiteboards, and aggregated community discussion.</p>
           <span class="note">A great resource and an early player.</span>
-          <span class="go">Open in new tab &#8599;</span>
-        </a>
-        <a class="card gold" href="https://kingy.ai/" target="_blank" rel="noopener noreferrer">
+          <div class="actions"><a class="btn" href="https://www.emergentmind.com/" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="emergent-mind-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="emergent-mind-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
+        <div class="card gold" data-id="kingy-ai">
           <span class="tag">News &amp; Tools</span>
           <h3>Kingy AI</h3>
           <p>AI product discovery, launch intelligence, a tool directory, courses, and demo-led YouTube coverage of what ships.</p>
           <span class="note">Probably on your radar. I'm not sure what to make of them.</span>
-          <span class="go">Open in new tab &#8599;</span>
-        </a>
-        <a class="card rose" href="https://huggingface.co/papers/trending?q=Prompting+" target="_blank" rel="noopener noreferrer">
+          <div class="actions"><a class="btn" href="https://kingy.ai/" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="kingy-ai-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="kingy-ai-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
+        <div class="card rose" data-id="hf-trending-prompting-papers">
           <span class="tag">Papers</span>
           <h3>Hugging Face — Trending Prompting Papers</h3>
           <p>Daily trending arXiv papers filtered to prompting — chain-of-thought, meta-prompting, RAG, agents, and more.</p>
           <span class="note">In the technical weeds, but some interesting stuff.</span>
-          <span class="go">Open in new tab &#8599;</span>
-        </a>
-        <a class="card" href="https://news.smol.ai/" target="_blank" rel="noopener noreferrer">
+          <div class="actions"><a class="btn" href="https://huggingface.co/papers/trending?q=Prompting+" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="hf-trending-prompting-papers-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="hf-trending-prompting-papers-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
+        <div class="card" data-id="ainews-smol-ai">
           <span class="tag">Newsletter</span>
           <h3>AINews by smol.ai</h3>
           <p>Weekday recaps of the top AI news for engineers — signals pulled from Discord, Reddit, and X, read by 150k+ AI engineers.</p>
           <span class="note">An almost daily AI engineering read for me (Discord, Reddit, X).</span>
-          <span class="go">Open in new tab &#8599;</span>
-        </a>
-        <a class="card alt" href="https://forwardfuture.com/" target="_blank" rel="noopener noreferrer">
+          <div class="actions"><a class="btn" href="https://news.smol.ai/" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="ainews-smol-ai-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="ainews-smol-ai-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
+        <div class="card alt" data-id="forward-future">
           <span class="tag">Newsletter</span>
           <h3>Forward Future</h3>
           <p>Matthew Berman's daily AI newsletter — news, tools, and breakthroughs, delivered each weekday.</p>
           <span class="note">Matthew is probably on your radar. Some good stuff, but sponsor pull is starting to have an impact.</span>
-          <span class="go">Open in new tab &#8599;</span>
-        </a>
+          <div class="actions"><a class="btn" href="https://forwardfuture.com/" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="forward-future-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="forward-future-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -240,5 +388,159 @@
     &copy; 2026 <a href="https://www.appliedailabs.com" target="_blank" rel="noopener noreferrer">Applied AI Labs</a><br>
     Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer">GitHub Pages</a>.
   </footer>
+<script>
+(function(){
+  "use strict";
+  var NOTES_KEY = 'omhub.notes', COLLAPSE_KEY = 'omhub.collapsed', THEME_KEY = 'omhub.theme';
+
+  function readJSON(k){
+    try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? null : v; }
+    catch(e){ return null; }
+  }
+  function writeJSON(k, v){
+    try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){}
+  }
+
+  /* ---- Theme ---- */
+  var themeBtn = document.getElementById('themeBtn');
+  function currentTheme(){ return document.documentElement.getAttribute('data-theme') || 'dark'; }
+  function renderThemeBtn(){
+    if (!themeBtn) return;
+    var light = currentTheme() === 'light';
+    themeBtn.textContent = light ? '\u{1F319}' : '☀'; /* moon (in light) / sun (in dark) */
+    themeBtn.setAttribute('title', light ? 'Switch to dark mode' : 'Switch to light mode');
+    themeBtn.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+  }
+  renderThemeBtn();
+  if (themeBtn){
+    themeBtn.addEventListener('click', function(){
+      var next = currentTheme() === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem(THEME_KEY, next); } catch(e){}
+      renderThemeBtn();
+    });
+  }
+
+  /* ---- Collapsible sections ---- */
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+  function secKey(s){ return s.getAttribute('data-sec'); }
+  function setCollapsed(s, collapsed){
+    s.classList.toggle('collapsed', collapsed);
+    var head = s.querySelector('.sec-head');
+    if (head) head.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+  }
+  function persistCollapse(){
+    writeJSON(COLLAPSE_KEY, sections.filter(function(s){ return s.classList.contains('collapsed'); }).map(secKey));
+  }
+
+  var saved = readJSON(COLLAPSE_KEY);
+  if (Array.isArray(saved)){
+    sections.forEach(function(s){ setCollapsed(s, saved.indexOf(secKey(s)) !== -1); });
+  }
+
+  sections.forEach(function(s){
+    var head = s.querySelector('.sec-head');
+    if (!head) return;
+    function toggle(){ setCollapsed(s, !s.classList.contains('collapsed')); persistCollapse(); }
+    head.addEventListener('click', toggle);
+    head.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){ e.preventDefault(); toggle(); }
+    });
+  });
+
+  var expandAll = document.getElementById('expandAll');
+  var collapseAll = document.getElementById('collapseAll');
+  if (expandAll) expandAll.addEventListener('click', function(){
+    sections.forEach(function(s){ setCollapsed(s, false); }); persistCollapse();
+  });
+  if (collapseAll) collapseAll.addEventListener('click', function(){
+    sections.forEach(function(s){ setCollapsed(s, true); }); persistCollapse();
+  });
+
+  /* ---- Per-item notes ---- */
+  var notes = readJSON(NOTES_KEY);
+  if (typeof notes !== 'object' || notes === null) notes = {};
+
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.notebox'));
+  boxes.forEach(function(box){
+    var card = box.parentNode;
+    while (card && !card.classList.contains('card')){ card = card.parentNode; }
+    var id = card ? card.getAttribute('data-id') : null;
+    var btn = box.querySelector('.note-toggle');
+    var area = box.querySelector('.note-area');
+    var ta = area ? area.querySelector('textarea') : null;
+    if (!id || !btn || !area || !ta) return;
+
+    var savedText = notes[id] || '';
+    if (savedText){
+      ta.value = savedText;
+      btn.classList.add('has');
+      btn.setAttribute('title', 'Edit note');
+    }
+
+    btn.addEventListener('click', function(){
+      var open = area.hasAttribute('hidden');
+      if (open){ area.removeAttribute('hidden'); ta.focus(); }
+      else { area.setAttribute('hidden', ''); }
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    var timer;
+    ta.addEventListener('input', function(){
+      notes[id] = ta.value;
+      btn.classList.toggle('has', !!ta.value);
+      btn.setAttribute('title', ta.value ? 'Edit note' : 'Add a note');
+      clearTimeout(timer);
+      timer = setTimeout(function(){ writeJSON(NOTES_KEY, notes); updateStatus(); }, 300);
+    });
+  });
+
+  /* ---- Export + status ---- */
+  var exportBtn = document.getElementById('exportNotes');
+  var statusEl = document.getElementById('noteStatus');
+  function countNotes(){
+    return Object.keys(notes).filter(function(k){ return notes[k] && String(notes[k]).trim(); }).length;
+  }
+  function updateStatus(){
+    var n = countNotes();
+    if (statusEl) statusEl.textContent = n === 1 ? '1 note' : (n + ' notes');
+    if (exportBtn) exportBtn.disabled = (n === 0);
+  }
+  updateStatus();
+
+  if (exportBtn) exportBtn.addEventListener('click', function(){
+    var lines = ['# OM Hub — my notes', ''];
+    var d = new Date();
+    lines.push('Exported ' + d.toLocaleString());
+    lines.push('');
+    sections.forEach(function(s){
+      var h2 = s.querySelector('.sec-head h2');
+      var secTitle = h2 ? h2.textContent : 'Section';
+      var block = [], any = false;
+      Array.prototype.forEach.call(s.querySelectorAll('.card'), function(card){
+        var id = card.getAttribute('data-id');
+        var text = id ? String(notes[id] || '').trim() : '';
+        if (!text) return;
+        if (!any){ block.push('## ' + secTitle, ''); any = true; }
+        var h3 = card.querySelector('h3');
+        block.push('### ' + (h3 ? h3.textContent : 'Item'));
+        Array.prototype.forEach.call(card.querySelectorAll('a[href]'), function(a){
+          block.push('- ' + a.getAttribute('href'));
+        });
+        block.push('');
+        text.split(/\r?\n/).forEach(function(ln){ block.push('> ' + ln); });
+        block.push('');
+      });
+      if (any) lines = lines.concat(block);
+    });
+    var blob = new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'om-hub-notes.md';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+  });
+})();
+</script>
 </body>
 </html>
