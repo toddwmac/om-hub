@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OM Hub — Examples &amp; Resources</title>
+<title>OM Hub — Hot Topics, Examples and Resources</title>
 <script>
   // Progressive-enhancement flags + no-flash theme, set before CSS paints.
   document.documentElement.classList.add('js');
@@ -148,8 +148,8 @@
 <body>
   <header>
     <span class="badge">OM Hub</span>
-    <h1>Examples &amp; Resources</h1>
-    <p>A small gallery of data-driven reports, AI-generated pages, and research resources. Every link opens in a new tab.</p>
+    <h1>Hot Topics, Examples and Resources</h1>
+    <p>A small gallery of data-driven reports, AI-generated pages, and research resources.</p>
   </header>
   <main>
     <div class="toolbar" role="toolbar" aria-label="Page controls">
@@ -159,6 +159,26 @@
       <button type="button" id="exportNotes" disabled>Export notes (.md)</button>
       <span class="note-status" id="noteStatus">0 notes</span>
     </div>
+
+    <section class="sec" data-sec="hot-topics">
+      <div class="sec-head" role="button" tabindex="0" aria-expanded="true" aria-controls="grid-hot-topics">
+        <span class="chev" aria-hidden="true">&#9662;</span>
+        <h2>Hot Topics</h2>
+        <span class="count"><b class="num">1</b> &#183; featured &#183; timely</span>
+      </div>
+      <div class="grid" id="grid-hot-topics">
+        <div class="card gold" data-id="jspace-explained">
+          <span class="tag">Interpretability</span>
+          <h3>J-Space, Explained</h3>
+          <p>A plain-English briefing on one of the most important recent ideas in AI research &mdash; why J-Space exists, what it means for how large models reason, and how to think about it when it shows up in a pitch deck. No machine-learning background required.</p>
+          <div class="actions"><a class="btn" href="jspace-explainer-improved.html" target="_blank" rel="noopener noreferrer">Open explainer &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="jspace-explained-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="jspace-explained-note" hidden><textarea rows="2" placeholder="Note, question, or comment &mdash; saved on this device only."></textarea></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section class="sec" data-sec="working-papers">
       <div class="sec-head" role="button" tabindex="0" aria-expanded="true" aria-controls="grid-working-papers">
