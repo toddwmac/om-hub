@@ -108,6 +108,11 @@
   .creator{ color:var(--muted); font-size:.8rem; margin-top:12px; }
   .creator b{ color:var(--strong); font-weight:600; }
   .note{ color:var(--muted); font-size:.78rem; margin-top:12px; font-style:italic; }
+  .added{ display:block; color:var(--muted); font-size:.74rem; margin-top:10px; letter-spacing:.02em; }
+  .latest{ margin:12px auto 0; font-size:.85rem; color:var(--accent); }
+  .latest b{ color:var(--strong); font-weight:600; }
+  .latest a{ color:var(--accent2); text-decoration:none; border-bottom:1px solid rgba(var(--accent2-rgb),.45); transition:.2s; }
+  .latest a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   .actions{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
   .btn{ display:inline-block; padding:8px 14px; border-radius:999px; font-size:.8rem; font-weight:600; text-decoration:none; border:1px solid var(--accent); color:var(--accent); transition:.2s; }
   .btn:hover{ background:rgba(var(--accent-rgb),.15); transform:translateY(-2px); }
@@ -150,6 +155,7 @@
     <span class="badge">OM Hub</span>
     <h1>Hot Topics, Examples and Resources</h1>
     <p>A small gallery of data-driven reports, AI-generated pages, and research resources.</p>
+    <p class="latest" id="latestAddition" hidden></p>
   </header>
   <main>
     <div class="toolbar" role="toolbar" aria-label="Page controls">
@@ -167,7 +173,7 @@
         <span class="count"><b class="num">1</b> &#183; featured &#183; timely</span>
       </div>
       <div class="grid" id="grid-hot-topics">
-        <div class="card gold" data-id="jspace-explained">
+        <div class="card gold" data-id="jspace-explained" data-added="2026-07-25">
           <span class="tag">Interpretability</span>
           <h3>J-Space, Explained</h3>
           <p>A plain-English briefing on one of the most important recent ideas in AI research &mdash; why J-Space exists, what it means for how large models reason, and how to think about it when it shows up in a pitch deck. No machine-learning background required.</p>
@@ -187,7 +193,7 @@
         <span class="count"><b class="num">6</b> &#183; papers &#183; audio overviews</span>
       </div>
       <div class="grid" id="grid-working-papers">
-        <div class="card" data-id="adaption-vs-adoption">
+        <div class="card" data-id="adaption-vs-adoption" data-added="2026-07-22">
           <span class="tag">Working Paper</span>
           <h3>Adaption vs. Adoption</h3>
           <p>An Applied AI Labs working paper on the difference between adopting AI tools and truly adapting how you work around them.</p>
@@ -200,7 +206,7 @@
             <div class="note-area" id="adaption-vs-adoption-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card alt" data-id="adaptive-leadership-ai-era">
+        <div class="card alt" data-id="adaptive-leadership-ai-era" data-added="2026-07-22">
           <span class="tag">Working Paper</span>
           <h3>Adaptive Leadership in the AI Era</h3>
           <p>Why AI transformation is an adaptive — not just technical — challenge. Covers distinguishing the two, systems thinking, and the human dynamics of change, with Cleveland Clinic, Netflix, and public-sector case studies.</p>
@@ -213,7 +219,7 @@
             <div class="note-area" id="adaptive-leadership-ai-era-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card gold" data-id="systems-thinking-ai-era">
+        <div class="card gold" data-id="systems-thinking-ai-era" data-added="2026-07-22">
           <span class="tag">Working Paper</span>
           <h3>Systems Thinking in the AI Era</h3>
           <p>Mapping classic systems thinking — feedback loops, archetypes, boundaries, and leverage points — onto AI design, deployment, and governance.</p>
@@ -225,7 +231,7 @@
             <div class="note-area" id="systems-thinking-ai-era-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card rose" data-id="emergent-properties-llms">
+        <div class="card rose" data-id="emergent-properties-llms" data-added="2026-07-22">
           <span class="tag">Working Paper</span>
           <h3>Emergent Properties of LLMs</h3>
           <p>A leadership guide to the emergent, unpredictable behavior of Large Language Models — and the mindset shifts needed to harness them responsibly.</p>
@@ -237,7 +243,7 @@
             <div class="note-area" id="emergent-properties-llms-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card" data-id="from-tool-to-partner">
+        <div class="card" data-id="from-tool-to-partner" data-added="2026-07-22">
           <span class="tag">Arena</span>
           <h3>From Tool to Partner</h3>
           <p>An Arena-built exploration of AI's shift from a tool we operate to a collaborative partner we work alongside.</p>
@@ -249,7 +255,7 @@
             <div class="note-area" id="from-tool-to-partner-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card alt" data-id="ai-mindset-work-family">
+        <div class="card alt" data-id="ai-mindset-work-family" data-added="2026-07-22">
           <span class="tag">Working Paper</span>
           <h3>The AI Mindset: Work and Family</h3>
           <p>An Applied AI Labs working paper on cultivating an AI mindset across work and family life.</p>
@@ -273,7 +279,7 @@
         <span class="count"><b class="num">2</b> &#183; hosted here</span>
       </div>
       <div class="grid" id="grid-startup-reports">
-        <div class="card" data-id="startup-decade-report">
+        <div class="card" data-id="startup-decade-report" data-added="2026-07-22">
           <span class="tag">Fable</span>
           <h3>Startup Decade Report</h3>
           <p>Ten-year view of the startup world from 2015–2025, with charts on funding, failures, and founder skills.</p>
@@ -283,7 +289,7 @@
             <div class="note-area" id="startup-decade-report-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card alt" data-id="startup-ecosystem-report">
+        <div class="card alt" data-id="startup-ecosystem-report" data-added="2026-07-22">
           <span class="tag">Grok</span>
           <h3>Startup Ecosystem Report</h3>
           <p>The startup ecosystem across 2016–2026 — AI trends, company failures, and what founders need to succeed.</p>
@@ -303,7 +309,7 @@
         <span class="count"><b class="num">2</b> &#183; external &#183; model-generated</span>
       </div>
       <div class="grid" id="grid-arena-showcases">
-        <div class="card gold" data-id="openai-prompting-strategy-shift">
+        <div class="card gold" data-id="openai-prompting-strategy-shift" data-added="2026-07-22">
           <span class="tag">Qwen36-27b</span>
           <h3>OpenAI Prompting Strategy Shift</h3>
           <p>New vs. traditional prompting best practices.</p>
@@ -314,7 +320,7 @@
             <div class="note-area" id="openai-prompting-strategy-shift-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card rose" data-id="openai-prompting-guide-2025">
+        <div class="card rose" data-id="openai-prompting-guide-2025" data-added="2026-07-22">
           <span class="tag">DeepSeek-v4</span>
           <h3>OpenAI Prompting Guide 2025</h3>
           <p>What's changed for 2025 and how to adapt.</p>
@@ -335,7 +341,7 @@
         <span class="count"><b class="num">6</b> &#183; external &#183; reading list</span>
       </div>
       <div class="grid" id="grid-research-resources">
-        <div class="card" data-id="artificial-analysis">
+        <div class="card" data-id="artificial-analysis" data-added="2026-07-22">
           <span class="tag">Benchmarks</span>
           <h3>Artificial Analysis</h3>
           <p>Independent benchmarks and leaderboards comparing AI models and API providers on intelligence, price, speed, and latency.</p>
@@ -346,7 +352,7 @@
             <div class="note-area" id="artificial-analysis-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card alt" data-id="emergent-mind">
+        <div class="card alt" data-id="emergent-mind" data-added="2026-07-22">
           <span class="tag">Research</span>
           <h3>Emergent Mind</h3>
           <p>Discover and learn new arXiv research fast — summaries, explainer videos, whiteboards, and aggregated community discussion.</p>
@@ -357,7 +363,7 @@
             <div class="note-area" id="emergent-mind-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card gold" data-id="kingy-ai">
+        <div class="card gold" data-id="kingy-ai" data-added="2026-07-22">
           <span class="tag">News &amp; Tools</span>
           <h3>Kingy AI</h3>
           <p>AI product discovery, launch intelligence, a tool directory, courses, and demo-led YouTube coverage of what ships.</p>
@@ -368,7 +374,7 @@
             <div class="note-area" id="kingy-ai-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card rose" data-id="hf-trending-prompting-papers">
+        <div class="card rose" data-id="hf-trending-prompting-papers" data-added="2026-07-22">
           <span class="tag">Papers</span>
           <h3>Hugging Face — Trending Prompting Papers</h3>
           <p>Daily trending arXiv papers filtered to prompting — chain-of-thought, meta-prompting, RAG, agents, and more.</p>
@@ -379,7 +385,7 @@
             <div class="note-area" id="hf-trending-prompting-papers-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card" data-id="ainews-smol-ai">
+        <div class="card" data-id="ainews-smol-ai" data-added="2026-07-22">
           <span class="tag">Newsletter</span>
           <h3>AINews by smol.ai</h3>
           <p>Weekday recaps of the top AI news for engineers — signals pulled from Discord, Reddit, and X, read by 150k+ AI engineers.</p>
@@ -390,7 +396,7 @@
             <div class="note-area" id="ainews-smol-ai-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
           </div>
         </div>
-        <div class="card alt" data-id="forward-future">
+        <div class="card alt" data-id="forward-future" data-added="2026-07-22">
           <span class="tag">Newsletter</span>
           <h3>Forward Future</h3>
           <p>Matthew Berman's daily AI newsletter — news, tools, and breakthroughs, delivered each weekday.</p>
@@ -440,6 +446,41 @@
       renderThemeBtn();
     });
   }
+
+  /* ---- "Latest addition" banner + per-card date stamps ---- */
+  (function(){
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.card[data-added]'));
+    if (!cards.length) return;
+    function fmt(iso){
+      var p = iso.split('-');
+      var d = new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10));
+      return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    }
+    function primaryLink(card){
+      var a = card.querySelector('.actions a[href]') || card.querySelector('a[href]');
+      return a ? a.getAttribute('href') : null;
+    }
+    function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; }); }
+    var best = null; /* { iso, title, href } */
+    cards.forEach(function(card){
+      var iso = card.getAttribute('data-added'); if (!iso) return;
+      var stamp = document.createElement('span');
+      stamp.className = 'added';
+      stamp.textContent = 'Added ' + fmt(iso);
+      card.appendChild(stamp);
+      if (!best || iso > best.iso){
+        best = { iso: iso, title: card.querySelector('h3') ? card.querySelector('h3').textContent : 'an item', href: primaryLink(card) };
+      }
+    });
+    var slot = document.getElementById('latestAddition');
+    if (slot && best){
+      var titleHTML = best.href
+        ? '<a href="' + esc(best.href) + '" target="_blank" rel="noopener noreferrer">' + esc(best.title) + '</a>'
+        : '<b>' + esc(best.title) + '</b>';
+      slot.innerHTML = 'Latest addition: ' + titleHTML + ' \u2014 ' + fmt(best.iso);
+      slot.removeAttribute('hidden');
+    }
+  })();
 
   /* ---- Collapsible sections ---- */
   var sections = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
