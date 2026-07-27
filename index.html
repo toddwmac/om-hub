@@ -81,8 +81,15 @@
   }
   .toolbar button:hover:not(:disabled){ border-color:var(--accent); color:var(--accent); }
   .toolbar button:disabled{ opacity:.45; cursor:default; }
+  .toolbar button[aria-pressed="true"]{ border-color:var(--accent); color:var(--accent); background:rgba(var(--accent-rgb),.12); }
   .toolbar #themeBtn{ font-size:.95rem; line-height:1; padding:6px 10px; }
   .toolbar .note-status{ margin-left:auto; font-size:.76rem; }
+  .omn-status{ color:var(--muted); font-size:.76rem; font-variant-numeric:tabular-nums; }
+  .empty-state{
+    text-align:center; padding:40px 24px; margin:28px auto; max-width:520px;
+    color:var(--muted); font-size:.95rem; background:var(--panel);
+    border:1px dashed var(--line); border-radius:var(--radius);
+  }
   .card{
     background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
     padding:26px; text-decoration:none; color:inherit; transition:.25s;
@@ -109,6 +116,16 @@
   .creator b{ color:var(--strong); font-weight:600; }
   .note{ color:var(--muted); font-size:.78rem; margin-top:12px; font-style:italic; }
   .added{ display:block; color:var(--muted); font-size:.74rem; margin-top:10px; letter-spacing:.02em; }
+  .card .newpill{
+    position:absolute; top:12px; right:12px; z-index:2;
+    font-size:.6rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; line-height:1;
+    padding:5px 9px; border-radius:999px; white-space:nowrap;
+    background:#f59e0b; color:#241a00;
+    box-shadow:0 1px 3px rgba(0,0,0,.3);
+    animation:newpulse 2.6s ease-in-out infinite;
+  }
+  @keyframes newpulse{ 0%,100%{ opacity:1; } 50%{ opacity:.8; } }
+  @media (prefers-reduced-motion: reduce){ .card .newpill{ animation:none; } }
   .latest{ margin:12px auto 0; font-size:.85rem; color:var(--accent); }
   .latest b{ color:var(--strong); font-weight:600; }
   .latest a{ color:var(--accent2); text-decoration:none; border-bottom:1px solid rgba(var(--accent2-rgb),.45); transition:.2s; }
@@ -135,6 +152,26 @@
   .note-toggle.has{ opacity:1; }
   .note-toggle .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); display:none; }
   .note-toggle.has .dot{ display:inline-block; }
+  .visit-toggle{
+    display:inline-flex; align-items:center; gap:6px; font:inherit; font-size:.74rem;
+    color:var(--muted); background:transparent; border:0; cursor:pointer;
+    padding:0; margin-right:14px; opacity:.7; transition:color .2s, opacity .2s;
+  }
+  .visit-toggle:hover{ color:var(--accent); opacity:1; }
+  .visit-toggle[aria-pressed="true"]{ color:var(--accent); opacity:1; }
+  .visit-toggle:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+  .like-toggle{
+    display:inline-flex; align-items:center; gap:6px; font:inherit; font-size:.8rem;
+    color:var(--muted); background:transparent; border:0; cursor:pointer;
+    padding:0; margin-right:14px; opacity:.7; transition:color .2s, opacity .2s;
+  }
+  .like-toggle:hover{ color:var(--warn); opacity:1; }
+  .like-toggle[aria-pressed="true"]{ color:var(--warn); opacity:1; }
+  .like-toggle:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+  .card.is-liked{ overflow:hidden; }
+  .card.is-liked::before{
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--warn); z-index:1;
+  }
   .note-area{ margin-top:8px; }
   .note-area textarea{
     width:100%; resize:vertical; font:inherit; font-size:.82rem; color:var(--ink);
@@ -162,7 +199,7 @@
       <button type="button" id="themeBtn" title="Switch theme">&#9728;</button>
       <button type="button" id="expandAll">Expand all</button>
       <button type="button" id="collapseAll">Collapse all</button>
-      <button type="button" id="exportNotes" disabled>Export notes (.md)</button>
+      <button type="button" id="exportNotes">Export list (.md)</button>
       <span class="note-status" id="noteStatus">0 notes</span>
     </div>
 
@@ -482,6 +519,272 @@
     }
   })();
 
+  /* ---- "New to you" pills (content added since your last visit) ---- */
+  (function(){
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.card[data-added]'));
+    if (!cards.length) return;
+
+    var SEEN_KEY = 'omhub.lastSeen';
+    function readSeen(){ try { var v = localStorage.getItem(SEEN_KEY); return v || null; } catch(e){ return null; } }
+    function writeSeen(v){ try { localStorage.setItem(SEEN_KEY, v); } catch(e){} }
+
+    var storedSeen = readSeen(); /* newest data-added we've shown this user before (ISO), or null */
+
+    /* Flag anything added after the last visit's newest item.
+       First visit (no baseline) shows no pills — the "Latest addition" banner
+       + per-card "Added" dates already convey recency. An absolute "New" (<=14d)
+       layer can be added later if desired. */
+    cards.forEach(function(card){
+      var iso = card.getAttribute('data-added');
+      if (!iso || !storedSeen || iso <= storedSeen) return;
+      var el = document.createElement('span');
+      el.className = 'newpill';
+      el.textContent = 'New to you';
+      card.appendChild(el);
+    });
+
+    /* Advance the baseline to the current newest item, so pills only reappear
+       for content added after this visit. */
+    var currentMax = cards.reduce(function(m, c){
+      var iso = c.getAttribute('data-added');
+      return (iso && (!m || iso > m)) ? iso : m;
+    }, null);
+    if (currentMax && (!storedSeen || currentMax > storedSeen)) writeSeen(currentMax);
+  })();
+
+  /* ---- Visited tracking (auto on link open + manual toggle) ---- */
+  (function(){
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.card[data-id]'));
+    if (!cards.length) return;
+
+    var VISITED_KEY = 'omhub.visited';
+    function readVisited(){
+      try { var v = JSON.parse(localStorage.getItem(VISITED_KEY)); return (v && typeof v === 'object') ? v : {}; }
+      catch(e){ return {}; }
+    }
+    function writeVisited(v){ try { localStorage.setItem(VISITED_KEY, JSON.stringify(v)); } catch(e){} }
+
+    var visited = readVisited();
+
+    function clearNewPill(card){
+      var p = card.querySelector('.newpill');
+      if (p) p.parentNode.removeChild(p);
+    }
+    function setVisited(card, on){
+      var id = card.getAttribute('data-id'); if (!id) return;
+      if (on){ visited[id] = true; card.classList.add('is-visited'); clearNewPill(card); }
+      else { delete visited[id]; card.classList.remove('is-visited'); }
+      writeVisited(visited);
+      var btn = card.querySelector('.visit-toggle');
+      if (btn){
+        var label = on ? 'Mark as not visited' : 'Mark as visited';
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        btn.setAttribute('title', label);
+        btn.setAttribute('aria-label', label);
+      }
+    }
+
+    cards.forEach(function(card){
+      var id = card.getAttribute('data-id'); if (!id) return;
+
+      /* inject the Visited toggle at the front of the reaction row */
+      var row = card.querySelector('.ntoggle-row');
+      if (row){
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'visit-toggle';
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('aria-label', 'Mark as visited');
+        btn.setAttribute('title', 'Mark as visited');
+        btn.innerHTML = '<span aria-hidden="true">\u2713</span><span class="vh"> Visited</span>';
+        btn.addEventListener('click', function(){
+          setVisited(card, !card.classList.contains('is-visited'));
+        });
+        row.insertBefore(btn, row.firstChild);
+      }
+
+      /* auto-mark when any content link in the card is opened */
+      Array.prototype.forEach.call(card.querySelectorAll('a[href]'), function(a){
+        a.addEventListener('click', function(){ if (!visited[id]) setVisited(card, true); });
+      });
+
+      /* restore prior state */
+      if (visited[id]) setVisited(card, true);
+    });
+  })();
+
+  /* ---- Like (favorite toggle) ---- */
+  (function(){
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.card[data-id]'));
+    if (!cards.length) return;
+
+    var LIKED_KEY = 'omhub.liked';
+    function readLiked(){
+      try { var v = JSON.parse(localStorage.getItem(LIKED_KEY)); return (v && typeof v === 'object') ? v : {}; }
+      catch(e){ return {}; }
+    }
+    function writeLiked(v){ try { localStorage.setItem(LIKED_KEY, JSON.stringify(v)); } catch(e){} }
+
+    var liked = readLiked();
+
+    function setLiked(card, on){
+      var id = card.getAttribute('data-id'); if (!id) return;
+      if (on){ liked[id] = true; card.classList.add('is-liked'); }
+      else { delete liked[id]; card.classList.remove('is-liked'); }
+      writeLiked(liked);
+      var btn = card.querySelector('.like-toggle');
+      if (btn){
+        var icon = btn.querySelector('[aria-hidden="true"]');
+        if (icon) icon.textContent = on ? '\u2665' : '\u2661'; /* filled / empty heart */
+        var label = on ? 'Unlike' : 'Like';
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        btn.setAttribute('title', label);
+        btn.setAttribute('aria-label', label);
+      }
+    }
+
+    cards.forEach(function(card){
+      var id = card.getAttribute('data-id'); if (!id) return;
+      var row = card.querySelector('.ntoggle-row');
+      if (row){
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'like-toggle';
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('aria-label', 'Like');
+        btn.setAttribute('title', 'Like');
+        btn.innerHTML = '<span aria-hidden="true">\u2661</span><span class="vh"> Like</span>';
+        btn.addEventListener('click', function(){
+          setLiked(card, !card.classList.contains('is-liked'));
+        });
+        row.insertBefore(btn, row.firstChild);
+      }
+      if (liked[id]) setLiked(card, true);
+    });
+  })();
+
+  /* ---- Unified filters (URL-synced) + status line + empty state ---- */
+  (function(){
+    var main = document.querySelector('main');
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+    var sections = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+    if (!cards.length) return;
+
+    var toolbar = document.querySelector('.toolbar');
+    var exportBtn = document.getElementById('exportNotes');
+
+    /* ---- filter chips (liked / hide-read / new) ---- */
+    var chipDefs = [
+      { key: 'liked',  off: '\u2661 Liked only', on: '\u2665 Liked only', title: 'Show only cards you have liked' },
+      { key: 'unread', off: '\u2713 Hide read',  on: '\u2713 Hide read',  title: 'Hide cards you have marked as visited' },
+      { key: 'new',    off: '\u2726 New only',   on: '\u2726 New only',   title: 'Show only items new since your last visit' }
+    ];
+    var chip = {};
+    chipDefs.forEach(function(d){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = d.off;
+      b.setAttribute('aria-pressed', 'false');
+      b.title = d.title;
+      b.addEventListener('click', function(){
+        var on = b.getAttribute('aria-pressed') === 'true';
+        b.setAttribute('aria-pressed', on ? 'false' : 'true');
+        b.textContent = (!on ? d.on : d.off);
+        syncUrl();
+        applyAll();
+      });
+      chip[d.key] = b;
+      if (exportBtn && exportBtn.parentNode) exportBtn.parentNode.insertBefore(b, exportBtn);
+    });
+
+    /* ---- URL sync (?view=liked,unread,new) ---- */
+    function syncUrl(){
+      var keys = chipDefs.filter(function(d){ return chip[d.key].getAttribute('aria-pressed') === 'true'; }).map(function(d){ return d.key; });
+      var url = new URL(window.location.href);
+      if (keys.length) url.searchParams.set('view', keys.join(',')); else url.searchParams.delete('view');
+      window.history.replaceState({}, '', url.toString());
+    }
+    function readUrl(){
+      var v = new URL(window.location.href).searchParams.get('view');
+      if (!v) return;
+      var keys = v.split(',');
+      chipDefs.forEach(function(d){
+        var on = keys.indexOf(d.key) !== -1;
+        chip[d.key].setAttribute('aria-pressed', on ? 'true' : 'false');
+        chip[d.key].textContent = on ? d.on : d.off;
+      });
+    }
+
+    /* ---- empty-state banner (right under the toolbar) ---- */
+    var empty = document.createElement('p');
+    empty.className = 'empty-state';
+    empty.setAttribute('role', 'status');
+    empty.setAttribute('aria-live', 'polite');
+    empty.style.display = 'none';
+    if (toolbar && toolbar.parentNode) toolbar.parentNode.insertBefore(empty, toolbar.nextSibling);
+    function emptyMessage(fLiked, fUnread, fNew){
+      if (fLiked && !fUnread && !fNew) return 'No liked items yet \u2014 tap \u2661 on a card to save it here.';
+      if (fNew && !fLiked && !fUnread) return 'Nothing new since your last visit. Check back soon!';
+      if (fUnread && !fLiked && !fNew) return 'Nothing left to read \u2014 you\u2019ve caught up on everything.';
+      return 'No items match the active filters.';
+    }
+
+    /* ---- status line (right side of the toolbar) ---- */
+    var status = document.createElement('span');
+    status.className = 'omn-status';
+    var noteStatus = document.getElementById('noteStatus');
+    if (noteStatus && noteStatus.parentNode) noteStatus.parentNode.insertBefore(status, noteStatus.nextSibling);
+    function updateStatus(){
+      var nLiked = cards.filter(function(c){ return c.classList.contains('is-liked'); }).length;
+      var nVisited = cards.filter(function(c){ return c.classList.contains('is-visited'); }).length;
+      var nFresh = cards.filter(function(c){ return !!c.querySelector('.newpill'); }).length;
+      var parts = [];
+      if (nLiked) parts.push(nLiked + ' liked');
+      if (nVisited) parts.push(nVisited + ' visited');
+      if (nFresh) parts.push(nFresh + ' new');
+      status.textContent = parts.join(' \u00b7 ');
+    }
+
+    /* ---- core: apply all active filters (AND semantics) ---- */
+    function applyAll(){
+      var fLiked = chip.liked.getAttribute('aria-pressed') === 'true';
+      var fUnread = chip.unread.getAttribute('aria-pressed') === 'true';
+      var fNew = chip.new.getAttribute('aria-pressed') === 'true';
+      var any = fLiked || fUnread || fNew;
+      var total = 0;
+      sections.forEach(function(sec){
+        var all = sec.querySelectorAll('.card');
+        var visible = 0;
+        Array.prototype.forEach.call(all, function(card){
+          var show = true;
+          if (fLiked) show = show && card.classList.contains('is-liked');
+          if (fUnread) show = show && !card.classList.contains('is-visited');
+          if (fNew) show = show && !!card.querySelector('.newpill');
+          card.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+        sec.style.display = (any && visible === 0) ? 'none' : '';
+        var num = sec.querySelector('.sec-head .num');
+        if (num) num.textContent = any ? (visible + ' / ' + all.length) : all.length;
+        total += visible;
+      });
+      if (any && total === 0){ empty.textContent = emptyMessage(fLiked, fUnread, fNew); empty.style.display = ''; }
+      else { empty.style.display = 'none'; }
+      updateStatus();
+    }
+
+    /* ---- react to liked/visited/pill changes from other modules ---- */
+    var pending = false;
+    function schedule(){ if (!pending){ pending = true; requestAnimationFrame(function(){ pending = false; applyAll(); }); } }
+    if (window.MutationObserver && main){
+      new MutationObserver(schedule).observe(main, { attributes: true, attributeFilter: ['class'], childList: true, subtree: true });
+    }
+
+    /* ---- init ---- */
+    readUrl();
+    applyAll();
+  })();
+
   /* ---- Collapsible sections ---- */
   var sections = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
   function secKey(s){ return s.getAttribute('data-sec'); }
@@ -565,39 +868,66 @@
   function updateStatus(){
     var n = countNotes();
     if (statusEl) statusEl.textContent = n === 1 ? '1 note' : (n + ' notes');
-    if (exportBtn) exportBtn.disabled = (n === 0);
   }
   updateStatus();
 
   if (exportBtn) exportBtn.addEventListener('click', function(){
-    var lines = ['# OM Hub — my notes', ''];
     var d = new Date();
-    lines.push('Exported ' + d.toLocaleString());
-    lines.push('');
+    var groups = { liked: [], visited: [], noted: [] };
+    var totLiked = 0, totVisited = 0, totNotes = 0;
     sections.forEach(function(s){
       var h2 = s.querySelector('.sec-head h2');
-      var secTitle = h2 ? h2.textContent : 'Section';
-      var block = [], any = false;
+      var secTitle = h2 ? h2.textContent : '';
       Array.prototype.forEach.call(s.querySelectorAll('.card'), function(card){
         var id = card.getAttribute('data-id');
+        var isLiked = card.classList.contains('is-liked');
+        var isVisited = card.classList.contains('is-visited');
         var text = id ? String(notes[id] || '').trim() : '';
-        if (!text) return;
-        if (!any){ block.push('## ' + secTitle, ''); any = true; }
+        if (isLiked) totLiked++;
+        if (isVisited) totVisited++;
+        if (text) totNotes++;
+        if (!isLiked && !isVisited && !text) return;
         var h3 = card.querySelector('h3');
-        block.push('### ' + (h3 ? h3.textContent : 'Item'));
-        Array.prototype.forEach.call(card.querySelectorAll('a[href]'), function(a){
-          block.push('- ' + a.getAttribute('href'));
-        });
-        block.push('');
-        text.split(/\r?\n/).forEach(function(ln){ block.push('> ' + ln); });
-        block.push('');
+        var links = Array.prototype.map.call(card.querySelectorAll('.actions a[href]'), function(a){ return a.getAttribute('href'); });
+        var title = (h3 ? h3.textContent : 'Item') + (secTitle ? ' (' + secTitle + ')' : '');
+        groups[isLiked ? 'liked' : (isVisited ? 'visited' : 'noted')].push({ title: title, links: links, liked: isLiked, visited: isVisited, note: text });
       });
-      if (any) lines = lines.concat(block);
     });
+    function renderEntry(e){
+      var out = ['### ' + e.title];
+      e.links.forEach(function(h){ out.push('- ' + h); });
+      var flags = [];
+      if (e.liked) flags.push('\u2605 Liked');
+      if (e.visited) flags.push('\u2713 Visited');
+      if (flags.length){ out.push(''); out.push('_' + flags.join(' \u00b7 ') + '_'); }
+      if (e.note){ out.push(''); e.note.split(/\r?\n/).forEach(function(ln){ out.push('> ' + ln); }); }
+      out.push('');
+      return out;
+    }
+    function renderGroup(title, entries){
+      if (!entries.length) return [];
+      var out = ['## ' + title, ''];
+      entries.forEach(function(e){ out = out.concat(renderEntry(e)); });
+      return out;
+    }
+    var lines = ['# OM Hub \u2014 my reading list', ''];
+    lines.push('_Exported ' + d.toLocaleString() + '_');
+    var summary = [];
+    if (totLiked) summary.push(totLiked + ' liked');
+    if (totVisited) summary.push(totVisited + ' visited');
+    if (totNotes) summary.push(totNotes + ' notes');
+    if (summary.length){ lines.push(''); lines.push('**' + summary.join(' \u00b7 ') + '**'); }
+    lines.push(''); lines.push('---'); lines.push('');
+    lines = lines.concat(renderGroup('\u2605 Liked', groups.liked));
+    lines = lines.concat(renderGroup('\u2713 Visited', groups.visited));
+    lines = lines.concat(renderGroup('\u270e Notes', groups.noted));
+    if (!groups.liked.length && !groups.visited.length && !groups.noted.length){
+      lines.push('_Nothing to export yet. Like (\u2665), open, or note a card to build your reading list._');
+    }
     var blob = new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    a.href = url; a.download = 'om-hub-notes.md';
+    a.href = url; a.download = 'om-hub-reading-list.md';
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
   });
