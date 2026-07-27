@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="md-to-html skill">
+<title>OM Hub — README</title>
+<style>
+/* =========================================================================
+   md-to-html · styles.css
+   Loaded for every purpose. Body gets a class matching the layout
+   (e.g. <body class="layout-docs">) and the root gets data-theme.
+   Dark mode is toggled with <html data-theme="dark">.
+   ========================================================================= */
+
+/* ---- Theme tokens ---- */
+:root {
+  --bg: #ffffff;
+  --bg-subtle: #f6f8fa;
+  --bg-code: #f6f8fa;
+  --fg: #1f2328;
+  --fg-muted: #59636e;
+  --border: #d0d7de;
+  --accent: #0969da;
+  --accent-fg: #ffffff;
+  --heading: #1f2328;
+  --link: #0969da;
+  --shadow: rgba(31, 35, 40, 0.08);
+  --radius: 8px;
+  --content-width: 760px;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --max-width: 760px;
+}
+
+[data-theme="dark"] {
+  --bg: #0d1117;
+  --bg-subtle: #161b22;
+  --bg-code: #161b22;
+  --fg: #e6edf3;
+  --fg-muted: #8b949e;
+  --border: #30363d;
+  --accent: #58a6ff;
+  --accent-fg: #0d1117;
+  --heading: #e6edf3;
+  --link: #58a6ff;
+  --shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* ---- Base reset / typography ---- */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
+body {
+  margin: 0;
+  background: var(--bg-subtle);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+article.content,
+main.content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+  background: var(--bg);
+  min-height: 100vh;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading);
+  line-height: 1.25;
+  margin: 1.8em 0 0.6em;
+  font-weight: 650;
+}
+h1 { font-size: 2.1em; margin-top: 0; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+h2 { font-size: 1.55em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+h3 { font-size: 1.25em; }
+h4 { font-size: 1.05em; }
+
+p { margin: 0 0 1em; }
+a { color: var(--link); }
+strong { font-weight: 650; }
+
+ul, ol { padding-left: 1.6em; margin: 0 0 1em; }
+li { margin: 0.25em 0; }
+li > ul, li > ol { margin: 0.25em 0; }
+
+blockquote {
+  margin: 1em 0;
+  padding: 0.4em 1em;
+  color: var(--fg-muted);
+  border-left: 0.25em solid var(--border);
+  background: var(--bg-subtle);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+blockquote p { margin: 0.3em 0; }
+
+hr { border: none; border-top: 2px solid var(--border); margin: 2em 0; }
+
+/* ---- Inline code & code blocks ---- */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--bg-code);
+  padding: 0.18em 0.4em;
+  border-radius: 4px;
+}
+pre {
+  margin: 1em 0;
+  padding: 16px;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+pre code { background: none; padding: 0; font-size: 0.85em; }
+
+/* ---- Tables ---- */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.2em 0;
+  display: block;
+  overflow-x: auto;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 8px 13px;
+  text-align: left;
+}
+th { background: var(--bg-subtle); font-weight: 650; }
+tr:nth-child(even) td { background: var(--bg-subtle); }
+
+/* ---- Images ---- */
+img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+/* ---- Anchor links ---- */
+h1[id], h2[id], h3[id], h4[id] { position: relative; scroll-margin-top: 56px; }
+h1[id] a.anchor, h2[id] a.anchor, h3[id] a.anchor, h4[id] a.anchor {
+  position: absolute;
+  left: -0.9em;
+  opacity: 0;
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+h1[id]:hover .anchor, h2[id]:hover .anchor, h3[id]:hover .anchor, h4[id]:hover .anchor { opacity: 1; }
+
+/* =========================================================================
+   Top bar (theme toggle) — shown for standalone / webpage / docs
+   ========================================================================= */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 8px 24px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.topbar .tb-title {
+  margin-right: auto;
+  font-size: 0.85em;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.theme-toggle {
+  cursor: pointer;
+  font-size: 0.85em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-subtle);
+  color: var(--fg);
+}
+.theme-toggle:hover { border-color: var(--accent); }
+
+/* =========================================================================
+   DOCS layout — sidebar TOC + content
+   ========================================================================= */
+body.layout-docs { background: var(--bg); overflow-x: clip; }
+.docs-shell {
+  display: grid;
+  grid-template-columns: var(--nav-w, 280px) 8px minmax(0, 1fr);
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 16px;
+  min-height: 100vh;
+}
+nav.toc {
+  position: sticky;
+  top: 44px;
+  align-self: start;
+  height: calc(100vh - 44px);
+  overflow-y: auto;
+  padding: 24px 16px;
+  border-right: 1px solid var(--border);
+  font-size: 0.9em;
+}
+nav.toc .toc-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75em;
+  color: var(--fg-muted);
+  margin: 0 0 12px;
+}
+nav.toc ul { list-style: none; padding: 0; margin: 0; }
+nav.toc li { margin: 2px 0; }
+nav.toc a {
+  display: block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--fg-muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+}
+nav.toc a:hover { color: var(--fg); background: var(--bg-subtle); }
+nav.toc a.active { color: var(--accent); font-weight: 600; border-left-color: var(--accent); background: var(--bg-subtle); }
+nav.toc li.toc-level-3 { padding-left: 12px; }
+nav.toc li.toc-level-4 { padding-left: 24px; }
+body.layout-docs article.content { max-width: none; padding: 48px 40px 96px; min-width: 0; }
+
+/* Resizable splitter between nav and content (docs layout) */
+.splitter {
+  position: relative;
+  cursor: col-resize;
+  z-index: 6;
+  user-select: none;
+}
+.splitter::before {
+  content: "";
+  position: absolute;
+  top: 32px;
+  bottom: 32px;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: var(--border);
+  border-radius: 2px;
+  transition: background .12s ease, width .12s ease;
+}
+.splitter:hover::before,
+.splitter.dragging::before,
+.splitter:focus-visible::before { background: var(--accent); width: 3px; }
+.splitter::after { /* enlarged, invisible hit area */
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -6px;
+  right: -6px;
+}
+.splitter:focus-visible { outline: none; }
+
+@media (max-width: 820px) {
+  .docs-shell { grid-template-columns: 1fr; }
+  nav.toc { display: none; }
+  .splitter { display: none; }
+  body.layout-docs article.content { padding: 32px 20px 80px; }
+}
+
+/* =========================================================================
+   SLIDES layout
+   ========================================================================= */
+body.layout-slides { background: #111418; overflow: hidden; }
+.slide {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 6vh 8vw;
+  color: #f0f3f7;
+  font-size: 1.5em;
+  line-height: 1.5;
+}
+.slide.active { display: flex; }
+.slide-title { text-align: center; }
+.slide h1 { font-size: 2.4em; border: none; }
+.slide h2 { font-size: 1.8em; border: none; color: #8ab4f8; margin-top: 0; }
+.slide pre, .slide code { background: #1c2128; border-color: #30363d; }
+.slide pre { font-size: 0.7em; }
+.slide-counter {
+  position: fixed;
+  bottom: 18px;
+  right: 24px;
+  font-size: 0.9em;
+  color: #8b949e;
+  font-family: var(--font-mono);
+}
+body.layout-slides .topbar { display: none; }
+
+/* =========================================================================
+   PRINT layout
+   ========================================================================= */
+body.layout-print { background: #fff; }
+body.layout-print article.content {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  min-height: auto;
+  box-shadow: none;
+}
+@media print {
+  body.layout-print { background: #fff; }
+  body.layout-print article.content { font-size: 12pt; line-height: 1.45; }
+  a { color: #000; text-decoration: underline; }
+  a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #555; }
+  a[href^="#"]::after { content: ""; }
+  pre, blockquote, table, figure, img { page-break-inside: avoid; }
+  h1, h2, h3 { page-break-after: avoid; }
+  pre, code { white-space: pre-wrap; word-wrap: break-word; }
+}
+
+/* =========================================================================
+   MINIMAL layout — bare content, easy to paste elsewhere
+   ========================================================================= */
+body.layout-minimal { background: transparent; }
+body.layout-minimal article.content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+  background: transparent;
+  min-height: auto;
+  font-size: 16px;
+}
+
+/* =========================================================================
+   EMAIL layout — visual preview of the email-safe output
+   ========================================================================= */
+body.layout-email { background: #e4e4e7; }
+.email-wrap { padding: 32px; }
+
+</style>
+<link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"><link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" disabled>
+</head>
+<body class="layout-docs">
+<div class="topbar"><span class="tb-title">OM Hub — README</span><button class="theme-toggle" type="button" aria-label="Toggle dark mode">🌙 Dark</button></div>
+<div class="docs-shell"><nav class="toc"><div class="toc-title">Contents</div><ul><li class="toc-level-1"><a href="#om-hub">OM Hub</a></li>
+<li class="toc-level-2"><a href="#adding-content-quick-cheat-sheet">Adding content — quick cheat sheet</a></li>
+<li class="toc-level-2"><a href="#live-site">Live site</a></li>
+<li class="toc-level-2"><a href="#whats-on-the-site">What's on the site</a></li>
+<li class="toc-level-2"><a href="#staying-current-date-visibility-features">Staying current: date &amp; visibility features</a></li>
+<li class="toc-level-3"><a href="#dates-whats-new">Dates &amp; &quot;what's new&quot;</a></li>
+<li class="toc-level-3"><a href="#tracking-engagement-per-visitor-on-this-device">Tracking engagement (per visitor, on this device)</a></li>
+<li class="toc-level-3"><a href="#filtering-sharing-views">Filtering &amp; sharing views</a></li>
+<li class="toc-level-3"><a href="#export-your-reading-list">Export your reading list</a></li>
+<li class="toc-level-3"><a href="#adding-content-full-reference-for-humans-agents">Adding content — full reference (for humans &amp; agents)</a></li>
+<li class="toc-level-3"><a href="#accessibility-resilience">Accessibility &amp; resilience</a></li>
+<li class="toc-level-3"><a href="#resetting-visitor-state">Resetting visitor state</a></li>
+<li class="toc-level-2"><a href="#publishing-changes">Publishing changes</a></li>
+<li class="toc-level-2"><a href="#tech">Tech</a></li></ul></nav><article class="content"><h1 id="om-hub"><a class="anchor" href="#om-hub" aria-hidden="true">#</a>OM Hub</h1>
+<p><strong>OM Hub</strong> — a small static site on GitHub Pages. It hosts data-driven
+startup report pages and links out to a curated set of external AI showcases,
+research, and analytics resources. Every link opens in a new tab.</p>
+<h2 id="adding-content-quick-cheat-sheet"><a class="anchor" href="#adding-content-quick-cheat-sheet" aria-hidden="true">#</a>Adding content — quick cheat sheet</h2>
+<p>Everything lives in one file: <strong><code>index.html</code></strong>. Add a <code>&lt;div class=&quot;card&quot;&gt;</code> inside the chosen section&#39;s <code>.grid</code>, set two attributes, and ship.</p>
+<ol>
+<li><strong>Pick a section</strong> (<code>data-sec</code>): <code>hot-topics</code> · <code>working-papers</code> · <code>startup-reports</code> · <code>arena-showcases</code> · <code>research-resources</code>.</li>
+<li><strong>Two required attributes</strong> on the card: <code>data-id=&quot;&lt;unique-slug&gt;&quot;</code> (never rename it later) and <code>data-added=&quot;YYYY-MM-DD&quot;</code> (today). <code>data-added</code> auto-updates the &quot;Latest addition&quot; banner, the per-card &quot;Added&quot; stamp, the &quot;New to you&quot; pill, and all counts.</li>
+<li><strong>The link</strong> sits inside <code>&lt;div class=&quot;actions&quot;&gt;</code>:<ul>
+<li>external site → <code>href=&quot;https://example.com/&quot;</code></li>
+<li>local page → <code>href=&quot;Foo.html&quot;</code> (commit the file too)</li>
+</ul>
+</li>
+<li><strong>Keep in sync</strong> → the note button&#39;s <code>aria-controls=&quot;YOUR-ID-note&quot;</code> must match its <code>&lt;div class=&quot;note-area&quot; id=&quot;YOUR-ID-note&quot;&gt;</code>.</li>
+<li><strong>Bump the count</strong> → set <code>N</code> in that section&#39;s <code>&lt;span class=&quot;count&quot;&gt;&lt;b class=&quot;num&quot;&gt;N&lt;/b&gt; …&lt;/span&gt;</code> to match the number of cards.</li>
+<li><strong>Ship</strong> → <code>.\deploy.ps1 -m &quot;Add &lt;title&gt;&quot;</code>.</li>
+</ol>
+<p>Full templates, rules, and a copy-paste agent prompt live in the <strong>Adding content — full reference</strong> section below.</p>
+<h2 id="live-site"><a class="anchor" href="#live-site" aria-hidden="true">#</a>Live site</h2>
+<p><strong><a href="https://toddwmac.github.io/om-xample/">https://toddwmac.github.io/om-xample/</a></strong></p>
+<h2 id="whats-on-the-site"><a class="anchor" href="#whats-on-the-site" aria-hidden="true">#</a>What&#39;s on the site</h2>
+<p><code>index.html</code> is the landing page — it links to everything: local report pages,
+AI Arena showcases, and external research/analytics resources. The specific
+cards change over time, so the <strong>landing page is the source of truth for current
+content</strong>; this README documents how the site works and how to add to it.</p>
+<h2 id="staying-current-date-visibility-features"><a class="anchor" href="#staying-current-date-visibility-features" aria-hidden="true">#</a>Staying current: date &amp; visibility features</h2>
+<p>The landing page helps visitors <strong>spot new content</strong>, <strong>track what they&#39;ve read
+and liked</strong>, and <strong>export their reading list</strong> — all client-side (browser
+<code>localStorage</code>, no account or backend). Nothing appears until the visitor uses
+it, so the default view stays calm.</p>
+<h3 id="dates-whats-new"><a class="anchor" href="#dates-whats-new" aria-hidden="true">#</a>Dates &amp; &quot;what&#39;s new&quot;</h3>
+<ul>
+<li>Every card carries a <code>data-added=&quot;YYYY-MM-DD&quot;</code> date.</li>
+<li>A per-card <strong>&quot;Added Jul 25, 2026&quot;</strong> line shows when it was published.</li>
+<li>A header banner reads <strong>&quot;Latest addition: [title] — date&quot;</strong> and links straight
+to that content.</li>
+<li>A <strong>&quot;New to you&quot;</strong> pill appears on cards added <em>since the visitor&#39;s last
+visit</em> (tracked via <code>localStorage</code> key <code>omhub.lastSeen</code>). The first visit shows
+no pills and seeds the baseline automatically; marking a card visited clears
+its pill in real time.</li>
+</ul>
+<h3 id="tracking-engagement-per-visitor-on-this-device"><a class="anchor" href="#tracking-engagement-per-visitor-on-this-device" aria-hidden="true">#</a>Tracking engagement (per visitor, on this device)</h3>
+<ul>
+<li><strong>Visited (✓)</strong> — auto-marked the moment a card&#39;s link is opened, or toggled
+manually. Stored in <code>omhub.visited</code>.</li>
+<li><strong>Like (♡)</strong> — mark favorites; liked cards get a faint rose edge so they pop
+without filtering. Stored in <code>omhub.liked</code>.</li>
+<li><strong>Notes (✎)</strong> — jot a per-card note. Stored in <code>omhub.notes</code>.</li>
+</ul>
+<h3 id="filtering-sharing-views"><a class="anchor" href="#filtering-sharing-views" aria-hidden="true">#</a>Filtering &amp; sharing views</h3>
+<p>Three toolbar chips combine with AND logic:</p>
+<ul>
+<li><strong>♡ Liked only</strong> — your favorites</li>
+<li><strong>✓ Hide read</strong> — hides visited cards (your to-read queue)</li>
+<li><strong>✦ New only</strong> — items carrying a &quot;New to you&quot; pill</li>
+</ul>
+<p>Active filters are written to the URL (e.g. <code>?view=liked,unread</code>), so any view
+is <strong>shareable and bookmarkable</strong> and restores on reload. While filtering, a
+status line shows live counts (&quot;3 liked · 5 visited · 1 new&quot;), section headers
+show <strong>&quot;visible / total&quot;</strong> (e.g. &quot;1 / 6&quot;), and empty results show a friendly
+message instead of a blank page.</p>
+<h3 id="export-your-reading-list"><a class="anchor" href="#export-your-reading-list" aria-hidden="true">#</a>Export your reading list</h3>
+<p>The toolbar&#39;s <strong>Export list (.md)</strong> button downloads <code>om-hub-reading-list.md</code> —
+every card you&#39;ve engaged with, grouped by <strong>★ Liked → ✓ Visited → ✎ Notes</strong>,
+with links, status flags, and your notes. Each card appears once (in its
+highest-priority group); cards with no engagement are omitted.</p>
+<h3 id="adding-content-full-reference-for-humans-agents"><a class="anchor" href="#adding-content-full-reference-for-humans-agents" aria-hidden="true">#</a>Adding content — full reference (for humans &amp; agents)</h3>
+<p>The whole site is one static file: <strong><code>index.html</code></strong>. There&#39;s no build step and no database — adding content means adding a card. Cards live inside collapsible <code>&lt;section class=&quot;sec&quot;&gt;</code> blocks, each containing a <code>&lt;div class=&quot;grid&quot;&gt;</code>. Drop a new <code>&lt;div class=&quot;card&quot;&gt;</code> into the grid of the section it belongs to.</p>
+<p><strong>Sections</strong> (<code>data-sec</code> → heading):</p>
+<table>
+<thead>
+<tr>
+<th><code>data-sec</code></th>
+<th>Heading</th>
+<th>Typical content</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hot-topics</code></td>
+<td>Hot Topics</td>
+<td>Featured / timely items</td>
+</tr>
+<tr>
+<td><code>working-papers</code></td>
+<td>AI Working Papers</td>
+<td>Papers, often with audio + PDF links</td>
+</tr>
+<tr>
+<td><code>startup-reports</code></td>
+<td>Startup Reports</td>
+<td>Local report pages</td>
+</tr>
+<tr>
+<td><code>arena-showcases</code></td>
+<td>AI Arena Showcases</td>
+<td>External Arena-built pages</td>
+</tr>
+<tr>
+<td><code>research-resources</code></td>
+<td>Interesting Research and Analytics Resources</td>
+<td>External reading / reference sites</td>
+</tr>
+</tbody></table>
+<p><strong>Two attributes every card needs</strong> on the <code>&lt;div class=&quot;card&quot;&gt;</code>:</p>
+<ul>
+<li><code>data-id=&quot;&lt;unique-slug&gt;&quot;</code> — a stable, unique id (e.g. <code>your-card-slug</code>). The browser&#39;s visited / liked / notes state is keyed off it, so make it unique and <strong>never rename it</strong> after it&#39;s published.</li>
+<li><code>data-added=&quot;YYYY-MM-DD&quot;</code> — the publish date (today, for new content). This is the field that makes the site feel alive: setting it <strong>automatically</strong> updates the &quot;Latest addition&quot; header banner, the per-card &quot;Added …&quot; stamp, the &quot;New to you&quot; pill for returning visitors, and every count. Don&#39;t hand-write the date text — it&#39;s generated from this attribute.</li>
+</ul>
+<p><strong>Template — external link card</strong> (copy and edit):</p>
+<pre><code class="language-html">&lt;div class=&quot;card&quot; data-id=&quot;UNIQUE-SLUG&quot; data-added=&quot;2026-07-27&quot;&gt;
+  &lt;span class=&quot;tag&quot;&gt;Routing&lt;/span&gt;
+  &lt;h3&gt;Title Goes Here&lt;/h3&gt;
+  &lt;p&gt;One or two sentences: what this is and why it&#39;s worth a click.&lt;/p&gt;
+  &lt;span class=&quot;note&quot;&gt;Optional editorial one-liner (your take). Omit this whole line if you don&#39;t want one.&lt;/span&gt;
+  &lt;div class=&quot;actions&quot;&gt;
+    &lt;a class=&quot;btn&quot; href=&quot;https://example.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Open &amp;#8599;&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;notebox&quot;&gt;
+    &lt;div class=&quot;ntoggle-row&quot;&gt;&lt;button type=&quot;button&quot; class=&quot;note-toggle&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;UNIQUE-SLUG-note&quot; title=&quot;Add a note&quot;&gt;&amp;#9998;&lt;span class=&quot;vh&quot;&gt; Note&lt;/span&gt;&lt;span class=&quot;dot&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;
+    &lt;div class=&quot;note-area&quot; id=&quot;UNIQUE-SLUG-note&quot; hidden&gt;&lt;textarea rows=&quot;2&quot; placeholder=&quot;Note, question, or comment — saved on this device only.&quot;&gt;&lt;/textarea&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p><strong>Local file page</strong> (a report HTML file committed to this repo): identical template, but <code>href</code> is just the filename — and the file must exist in the repo:</p>
+<pre><code class="language-html">&lt;a class=&quot;btn&quot; href=&quot;your-report.html&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Open report &amp;#8599;&lt;/a&gt;
+</code></pre>
+<p><strong>Multiple links</strong> (e.g. &quot;Listen&quot; + &quot;Read paper&quot;): put more than one <code>&lt;a class=&quot;btn&quot;&gt;</code> inside the same <code>&lt;div class=&quot;actions&quot;&gt;</code>:</p>
+<pre><code class="language-html">&lt;div class=&quot;actions&quot;&gt;
+  &lt;a class=&quot;btn&quot; href=&quot;https://...&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Listen (audio overview) &amp;#8599;&lt;/a&gt;
+  &lt;a class=&quot;btn&quot; href=&quot;https://...&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Read paper &amp;#8599;&lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
+<p><strong>Color accent (optional):</strong> add <code>gold</code>, <code>rose</code>, or <code>alt</code> to the class, e.g. <code>&lt;div class=&quot;card gold&quot; …&gt;</code>. Liked cards get a rose edge on top of whichever accent you choose.</p>
+<p><strong>Two things that are easy to miss — both required:</strong></p>
+<ol>
+<li><strong>Keep <code>aria-controls</code> and <code>id</code> in sync.</strong> The note button&#39;s <code>aria-controls=&quot;UNIQUE-SLUG-note&quot;</code> must exactly match its note-area&#39;s <code>id=&quot;UNIQUE-SLUG-note&quot;</code>. Follow the <code>{data-id}-note</code> convention and they&#39;ll match by construction.</li>
+<li><strong>Update the section count.</strong> Every section header carries <code>&lt;span class=&quot;count&quot;&gt;&lt;b class=&quot;num&quot;&gt;N&lt;/b&gt; …&lt;/span&gt;</code> — set <code>N</code> to the number of cards in that grid so the header badge and the &quot;visible / total&quot; counts stay correct.</li>
+</ol>
+<p><strong>Publish:</strong> a commit + push is all it takes; GitHub Pages rebuilds on push to <code>main</code>:</p>
+<pre><code class="language-powershell">.\deploy.ps1 -m &quot;Add &lt;title&gt;&quot;   # omit -m for an auto timestamp message
+</code></pre>
+<p><strong>Hand it to an agent.</strong> Fill in the brackets and paste:</p>
+<blockquote>
+<p>Add a card to the <code>&lt;data-sec&gt;</code> section in <code>index.html</code> (repo root). Title: <code>&lt;...&gt;</code>. URL: <code>&lt;...&gt;</code>. Tag: <code>&lt;...&gt;</code>. Use today&#39;s date for <code>data-added</code>, pick a unique <code>data-id</code>, and follow the &quot;Adding content — full reference&quot; section of README.md exactly — including the <code>aria-controls</code>/<code>id</code> sync and the section-count update. Leave it uncommitted, or run <code>.\deploy.ps1 -m &quot;Add &lt;title&gt;&quot;</code> to publish.</p>
+</blockquote>
+<p>Returning visitors will see a &quot;New to you&quot; pill on a freshly added card until their next visit.</p>
+<h3 id="accessibility-resilience"><a class="anchor" href="#accessibility-resilience" aria-hidden="true">#</a>Accessibility &amp; resilience</h3>
+<ul>
+<li>Icon toggles carry <code>aria-label</code> / <code>aria-pressed</code>; keyboard focus shows a
+visible ring; all controls are real <code>&lt;button&gt;</code> elements.</li>
+<li>The &quot;New to you&quot; pulse respects <code>prefers-reduced-motion</code>.</li>
+<li>It&#39;s all progressive enhancement — with JavaScript off the page still works
+as a plain link gallery (notes/filters simply don&#39;t appear).</li>
+</ul>
+<h3 id="resetting-visitor-state"><a class="anchor" href="#resetting-visitor-state" aria-hidden="true">#</a>Resetting visitor state</h3>
+<p>To clear everything a visitor has stored (handy while testing):</p>
+<pre><code class="language-js">[&#39;omhub.notes&#39;,&#39;omhub.visited&#39;,&#39;omhub.liked&#39;,&#39;omhub.lastSeen&#39;].forEach(k=&gt;localStorage.removeItem(k)); location.reload()
+</code></pre>
+<h2 id="publishing-changes"><a class="anchor" href="#publishing-changes" aria-hidden="true">#</a>Publishing changes</h2>
+<p>GitHub Pages automatically rebuilds whenever you push to the <code>main</code> branch, so
+publishing a change is just a commit and a push. The helper script does both:</p>
+<pre><code class="language-powershell">.\deploy.ps1                 # commit + push with an auto (timestamp) message
+.\deploy.ps1 -m &quot;Add Q3 chart&quot;   # commit + push with your own message
+</code></pre>
+<p>Run it from this folder. The live site updates at the URL above within about a
+minute. You can also use plain git if you prefer:</p>
+<pre><code class="language-powershell">git add -A
+git commit -m &quot;describe the change&quot;
+git push
+</code></pre>
+<h2 id="tech"><a class="anchor" href="#tech" aria-hidden="true">#</a>Tech</h2>
+<p>Plain static HTML, CSS, and Chart.js. No build step — pages are served exactly
+as they sit in this repository.</p>
+</article></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>/* md-to-html · features.js
+ * Bundled for layouts that enable JS (standalone, webpage, docs, slides).
+ * Safe no-ops if elements are missing.
+ */
+(function () {
+  "use strict";
+
+  /* ---- Dark mode toggle ------------------------------------------------ */
+  function initThemeToggle() {
+    var root = document.documentElement;
+    var btn = document.querySelector(".theme-toggle");
+    if (!btn) return;
+
+    var stored = null;
+    try { stored = localStorage.getItem("md2html-theme"); } catch (e) {}
+    if (stored) {
+      root.setAttribute("data-theme", stored);
+    } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      root.setAttribute("data-theme", "dark");
+    }
+
+    function syncHljs() {
+      var dark = root.getAttribute("data-theme") === "dark";
+      var light = document.getElementById("hljs-light");
+      var darkSS = document.getElementById("hljs-dark");
+      if (light) light.disabled = dark;
+      if (darkSS) darkSS.disabled = !dark;
+    }
+    syncHljs();
+
+    btn.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("md2html-theme", next); } catch (e) {}
+      syncHljs();
+    });
+  }
+
+  /* ---- Scrollspy for docs TOC ----------------------------------------- */
+  function initScrollspy() {
+    var links = document.querySelectorAll("nav.toc a[href^='#']");
+    if (!links.length) return;
+
+    var byId = {};
+    links.forEach(function (a) {
+      var id = a.getAttribute("href").slice(1);
+      var el = document.getElementById(id);
+      if (el) byId[id] = a;
+    });
+
+    var headings = Object.keys(byId)
+      .map(function (id) { return { id: id, el: document.getElementById(id) }; })
+      .filter(function (h) { return h.el; });
+
+    function onScroll() {
+      var pos = window.scrollY + window.innerHeight * 0.3;
+      var current = headings[0] && headings[0].id;
+      headings.forEach(function (h) { if (h.el.offsetTop <= pos) current = h.id; });
+      Object.keys(byId).forEach(function (id) {
+        byId[id].classList.toggle("active", id === current);
+      });
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* ---- Smooth-scroll for in-page links -------------------------------- */
+  function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        var id = a.getAttribute("href").slice(1);
+        var el = document.getElementById(id);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          history.replaceState(null, "", "#" + id);
+        }
+      });
+    });
+  }
+
+  /* ---- Resizable nav splitter (docs layout) ------------------------- */
+  function initResizableNav() {
+    var shell = document.querySelector(".docs-shell");
+    if (!shell) return;
+    var nav = shell.querySelector("nav.toc");
+    var article = shell.querySelector("article.content");
+    if (!nav || !article) return;
+
+    var KEY = "md2html-nav-w";
+    var MIN = 180, MAX = 520, DEF = 280;
+    var saved = null;
+    try { saved = parseFloat(localStorage.getItem(KEY)); } catch (e) {}
+    var w = (saved >= MIN && saved <= MAX) ? saved : DEF;
+    shell.style.setProperty("--nav-w", w + "px");
+
+    var splitter = document.createElement("div");
+    splitter.className = "splitter";
+    splitter.setAttribute("role", "separator");
+    splitter.setAttribute("aria-orientation", "vertical");
+    splitter.setAttribute("aria-label", "Resize navigation panel");
+    splitter.setAttribute("tabindex", "0");
+    splitter.title = "Drag to resize (←/→ to adjust, double-click to reset)";
+    shell.insertBefore(splitter, article);
+
+    function apply(px) {
+      w = Math.max(MIN, Math.min(MAX, px));
+      shell.style.setProperty("--nav-w", w + "px");
+    }
+    function persist() { try { localStorage.setItem(KEY, String(Math.round(w))); } catch (e) {} }
+
+    var dragging = false;
+    splitter.addEventListener("pointerdown", function (e) {
+      dragging = true;
+      try { splitter.setPointerCapture(e.pointerId); } catch (err) {}
+      splitter.classList.add("dragging");
+      document.body.style.userSelect = "none";
+      document.body.style.cursor = "col-resize";
+      e.preventDefault();
+    });
+    splitter.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+      apply(e.clientX - shell.getBoundingClientRect().left);
+    });
+    function release(e) {
+      if (!dragging) return;
+      dragging = false;
+      try { splitter.releasePointerCapture(e.pointerId); } catch (err) {}
+      splitter.classList.remove("dragging");
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
+      persist();
+    }
+    splitter.addEventListener("pointerup", release);
+    splitter.addEventListener("pointercancel", release);
+
+    splitter.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { apply(w - 24); persist(); e.preventDefault(); }
+      else if (e.key === "ArrowRight") { apply(w + 24); persist(); e.preventDefault(); }
+      else if (e.key === "Home") { apply(DEF); persist(); e.preventDefault(); }
+    });
+    splitter.addEventListener("dblclick", function () { apply(DEF); persist(); });
+  }
+
+  /* ---- Slides keyboard navigation ------------------------------------- */
+  function initSlides() {
+    var slides = document.querySelectorAll(".slide");
+    if (!slides.length) return;
+    var idx = 0;
+
+    function show(n) {
+      idx = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach(function (s, i) { s.classList.toggle("active", i === idx); });
+      var counter = document.querySelector(".slide-counter");
+      if (counter) counter.textContent = (idx + 1) + " / " + slides.length;
+      try { localStorage.setItem("md2html-slide", String(idx)); } catch (e) {}
+    }
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); show(idx + 1); }
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); show(idx - 1); }
+      else if (e.key === "Home") { show(0); }
+      else if (e.key === "End") { show(slides.length - 1); }
+      else if (e.key === "f" || e.key === "F") {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+      }
+    });
+    document.addEventListener("click", function (e) {
+      if (e.target.closest("a")) return;
+      show(idx + 1);
+    });
+    show(0);
+  }
+
+  /* ---- boot ----------------------------------------------------------- */
+  document.addEventListener("DOMContentLoaded", function () {
+    initThemeToggle();
+    initResizableNav();
+    initScrollspy();
+    initSmoothScroll();
+    initSlides();
+    if (window.hljs) { try { window.hljs.highlightAll(); } catch (e) {} }
+  });
+})();
+</script>
+</body>
+</html>

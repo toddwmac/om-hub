@@ -1,39 +1,34 @@
-# om-xample
+# OM Hub
 
-**OM Hub** — a small static site on GitHub Pages. It hosts two data-driven
+**OM Hub** — a small static site on GitHub Pages. It hosts data-driven
 startup report pages and links out to a curated set of external AI showcases,
 research, and analytics resources. Every link opens in a new tab.
+
+## Adding content — quick cheat sheet
+
+Everything lives in one file: **`index.html`**. Add a `<div class="card">` inside the chosen section's `.grid`, set two attributes, and ship.
+
+1. **Pick a section** (`data-sec`): `hot-topics` · `working-papers` · `startup-reports` · `arena-showcases` · `research-resources`.
+2. **Two required attributes** on the card: `data-id="<unique-slug>"` (never rename it later) and `data-added="YYYY-MM-DD"` (today). `data-added` auto-updates the "Latest addition" banner, the per-card "Added" stamp, the "New to you" pill, and all counts.
+3. **The link** sits inside `<div class="actions">`:
+   - external site → `href="https://example.com/"`
+   - local page → `href="Foo.html"` (commit the file too)
+4. **Keep in sync** → the note button's `aria-controls="YOUR-ID-note"` must match its `<div class="note-area" id="YOUR-ID-note">`.
+5. **Bump the count** → set `N` in that section's `<span class="count"><b class="num">N</b> …</span>` to match the number of cards.
+6. **Ship** → `.\deploy.ps1 -m "Add <title>"`.
+
+Full templates, rules, and a copy-paste agent prompt live in the **Adding content — full reference** section below.
 
 ## Live site
 
 **https://toddwmac.github.io/om-xample/**
 
-## Reports
+## What's on the site
 
-- [Fable — Startup Decade Report (2015–2025)](Fable-startup-report.html)
-- [Grok — Startup Ecosystem Report (2016–2026)](Grok-startup-report.html)
-- [index.html](index.html) — landing page that links to everything
-
-## AI Arena showcases (external)
-
-Model-generated pages hosted on Arena. They are **not** part of this repo — the
-landing page links out to them, opening in a new tab.
-
-- [OpenAI Prompting Strategy Shift](https://019f8a0f-9862-7864-9943-ca8ccdfdfcf8.arena.site/) — created by Qwen36-27b
-- [OpenAI Prompting Guide 2025](https://019f8a0f-9862-7d23-b5d8-6c9aa3ee42f6.arena.site/) — created by DeepSeek-v4
-
-## Research & Analytics resources (external)
-
-External reading and reference sites linked from the landing page. They are
-**not** part of this repo — the landing page links out to them, opening in a
-new tab.
-
-- [Artificial Analysis](https://artificialanalysis.ai/) — independent benchmarks and leaderboards for AI models and API providers
-- [Emergent Mind](https://www.emergentmind.com/) — discover and learn new arXiv research fast
-- [Kingy AI](https://kingy.ai/) — AI product discovery, tool directory, and YouTube coverage
-- [Hugging Face — Trending Prompting Papers](https://huggingface.co/papers/trending?q=Prompting+) — daily trending arXiv papers on prompting
-- [AINews by smol.ai](https://news.smol.ai/) — weekday AI news recaps for engineers
-- [Forward Future](https://forwardfuture.com/) — Matthew Berman's daily AI newsletter
+`index.html` is the landing page — it links to everything: local report pages,
+AI Arena showcases, and external research/analytics resources. The specific
+cards change over time, so the **landing page is the source of truth for current
+content**; this README documents how the site works and how to add to it.
 
 ## Staying current: date & visibility features
 
@@ -82,19 +77,76 @@ every card you've engaged with, grouped by **★ Liked → ✓ Visited → ✎ N
 with links, status flags, and your notes. Each card appears once (in its
 highest-priority group); cards with no engagement are omitted.
 
-### Adding new content
+### Adding content — full reference (for humans & agents)
 
-Set `data-added` on any new card and everything updates automatically — the
-banner, the "Added" stamp, the "New to you" pill for returning visitors, and
-all counts:
+The whole site is one static file: **`index.html`**. There's no build step and no database — adding content means adding a card. Cards live inside collapsible `<section class="sec">` blocks, each containing a `<div class="grid">`. Drop a new `<div class="card">` into the grid of the section it belongs to.
+
+**Sections** (`data-sec` → heading):
+
+| `data-sec` | Heading | Typical content |
+|---|---|---|
+| `hot-topics` | Hot Topics | Featured / timely items |
+| `working-papers` | AI Working Papers | Papers, often with audio + PDF links |
+| `startup-reports` | Startup Reports | Local report pages |
+| `arena-showcases` | AI Arena Showcases | External Arena-built pages |
+| `research-resources` | Interesting Research and Analytics Resources | External reading / reference sites |
+
+**Two attributes every card needs** on the `<div class="card">`:
+
+- `data-id="<unique-slug>"` — a stable, unique id (e.g. `your-card-slug`). The browser's visited / liked / notes state is keyed off it, so make it unique and **never rename it** after it's published.
+- `data-added="YYYY-MM-DD"` — the publish date (today, for new content). This is the field that makes the site feel alive: setting it **automatically** updates the "Latest addition" header banner, the per-card "Added …" stamp, the "New to you" pill for returning visitors, and every count. Don't hand-write the date text — it's generated from this attribute.
+
+**Template — external link card** (copy and edit):
 
 ```html
-<div class="card" data-id="my-new-card" data-added="2026-08-03">
-  ...
+<div class="card" data-id="UNIQUE-SLUG" data-added="2026-07-27">
+  <span class="tag">Routing</span>
+  <h3>Title Goes Here</h3>
+  <p>One or two sentences: what this is and why it's worth a click.</p>
+  <span class="note">Optional editorial one-liner (your take). Omit this whole line if you don't want one.</span>
+  <div class="actions">
+    <a class="btn" href="https://example.com/" target="_blank" rel="noopener noreferrer">Open &#8599;</a>
+  </div>
+  <div class="notebox">
+    <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="UNIQUE-SLUG-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+    <div class="note-area" id="UNIQUE-SLUG-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+  </div>
 </div>
 ```
 
-Returning visitors will see a "New to you" pill on it until their next visit.
+**Local file page** (a report HTML file committed to this repo): identical template, but `href` is just the filename — and the file must exist in the repo:
+
+```html
+<a class="btn" href="your-report.html" target="_blank" rel="noopener noreferrer">Open report &#8599;</a>
+```
+
+**Multiple links** (e.g. "Listen" + "Read paper"): put more than one `<a class="btn">` inside the same `<div class="actions">`:
+
+```html
+<div class="actions">
+  <a class="btn" href="https://..." target="_blank" rel="noopener noreferrer">Listen (audio overview) &#8599;</a>
+  <a class="btn" href="https://..." target="_blank" rel="noopener noreferrer">Read paper &#8599;</a>
+</div>
+```
+
+**Color accent (optional):** add `gold`, `rose`, or `alt` to the class, e.g. `<div class="card gold" …>`. Liked cards get a rose edge on top of whichever accent you choose.
+
+**Two things that are easy to miss — both required:**
+
+1. **Keep `aria-controls` and `id` in sync.** The note button's `aria-controls="UNIQUE-SLUG-note"` must exactly match its note-area's `id="UNIQUE-SLUG-note"`. Follow the `{data-id}-note` convention and they'll match by construction.
+2. **Update the section count.** Every section header carries `<span class="count"><b class="num">N</b> …</span>` — set `N` to the number of cards in that grid so the header badge and the "visible / total" counts stay correct.
+
+**Publish:** a commit + push is all it takes; GitHub Pages rebuilds on push to `main`:
+
+```powershell
+.\deploy.ps1 -m "Add <title>"   # omit -m for an auto timestamp message
+```
+
+**Hand it to an agent.** Fill in the brackets and paste:
+
+> Add a card to the `<data-sec>` section in `index.html` (repo root). Title: `<...>`. URL: `<...>`. Tag: `<...>`. Use today's date for `data-added`, pick a unique `data-id`, and follow the "Adding content — full reference" section of README.md exactly — including the `aria-controls`/`id` sync and the section-count update. Leave it uncommitted, or run `.\deploy.ps1 -m "Add <title>"` to publish.
+
+Returning visitors will see a "New to you" pill on a freshly added card until their next visit.
 
 ### Accessibility & resilience
 
