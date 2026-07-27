@@ -898,7 +898,7 @@
       var primary = e.links[0];
       var out = [ primary ? ('### [' + e.title + '](' + primary + ')') : ('### ' + e.title) ];
       if (e.links.length > 1){
-        e.links.slice(1).forEach(function(h){ out.push('- ' + h); });
+        e.links.slice(1).forEach(function(h){ out.push('- <' + h + '>'); });
       }
       var flags = [];
       if (e.liked) flags.push('\u2605 Liked');
