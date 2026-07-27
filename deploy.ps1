@@ -1,7 +1,7 @@
 #Requires -Version 5.0
 <#
   .SYNOPSIS
-    One-command deploy for the om-xample GitHub Pages site.
+    One-command deploy for the om-hub GitHub Pages site.
 
   .DESCRIPTION
     Stages all changes, commits them, and pushes to GitHub.
@@ -36,4 +36,4 @@ git push origin HEAD
 
 Write-Host ""
 Write-Host ("Pushed. GitHub Pages will rebuild in about a minute: " `
-        + "https://toddwmac.github.io/om-xample/") -ForegroundColor Green
+        + "https://toddwmac.github.io/om-hub/") -ForegroundColor Green

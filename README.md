@@ -21,7 +21,7 @@ Full templates, rules, and a copy-paste agent prompt live in the **Adding conten
 
 ## Live site
 
-**https://toddwmac.github.io/om-xample/**
+**https://toddwmac.github.io/om-hub/**
 
 ## What's on the site
 
