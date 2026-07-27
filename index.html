@@ -873,6 +873,7 @@
 
   if (exportBtn) exportBtn.addEventListener('click', function(){
     var d = new Date();
+    function abs(href){ try { return new URL(href, document.baseURI).href; } catch(e){ return href; } }
     var groups = { liked: [], visited: [], noted: [] };
     var totLiked = 0, totVisited = 0, totNotes = 0;
     sections.forEach(function(s){
@@ -888,7 +889,7 @@
         if (text) totNotes++;
         if (!isLiked && !isVisited && !text) return;
         var h3 = card.querySelector('h3');
-        var links = Array.prototype.map.call(card.querySelectorAll('.actions a[href]'), function(a){ return a.getAttribute('href'); });
+        var links = Array.prototype.map.call(card.querySelectorAll('.actions a[href]'), function(a){ return abs(a.getAttribute('href')); });
         var title = (h3 ? h3.textContent : 'Item') + (secTitle ? ' (' + secTitle + ')' : '');
         groups[isLiked ? 'liked' : (isVisited ? 'visited' : 'noted')].push({ title: title, links: links, liked: isLiked, visited: isVisited, note: text });
       });
