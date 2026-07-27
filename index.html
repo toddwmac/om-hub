@@ -894,8 +894,11 @@
       });
     });
     function renderEntry(e){
-      var out = ['### ' + e.title];
-      e.links.forEach(function(h){ out.push('- ' + h); });
+      var primary = e.links[0];
+      var out = [ primary ? ('### [' + e.title + '](' + primary + ')') : ('### ' + e.title) ];
+      if (e.links.length > 1){
+        e.links.slice(1).forEach(function(h){ out.push('- ' + h); });
+      }
       var flags = [];
       if (e.liked) flags.push('\u2605 Liked');
       if (e.visited) flags.push('\u2713 Visited');
