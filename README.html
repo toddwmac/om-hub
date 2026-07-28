@@ -362,6 +362,7 @@ body.layout-email { background: #e4e4e7; }
 <li class="toc-level-3"><a href="#adding-content-full-reference-for-humans-agents">Adding content — full reference (for humans &amp; agents)</a></li>
 <li class="toc-level-3"><a href="#accessibility-resilience">Accessibility &amp; resilience</a></li>
 <li class="toc-level-3"><a href="#resetting-visitor-state">Resetting visitor state</a></li>
+<li class="toc-level-3"><a href="#testing-demo">Testing / demo</a></li>
 <li class="toc-level-2"><a href="#publishing-changes">Publishing changes</a></li>
 <li class="toc-level-2"><a href="#tech">Tech</a></li></ul></nav><article class="content"><h1 id="om-hub"><a class="anchor" href="#om-hub" aria-hidden="true">#</a>OM Hub</h1>
 <p><strong>OM Hub</strong> — a small static site on GitHub Pages. It hosts data-driven
@@ -522,6 +523,8 @@ as a plain link gallery (notes/filters simply don&#39;t appear).</li>
 <p>To clear everything a visitor has stored (handy while testing):</p>
 <pre><code class="language-js">[&#39;omhub.notes&#39;,&#39;omhub.visited&#39;,&#39;omhub.liked&#39;,&#39;omhub.lastSeen&#39;].forEach(k=&gt;localStorage.removeItem(k)); location.reload()
 </code></pre>
+<h3 id="testing-demo"><a class="anchor" href="#testing-demo" aria-hidden="true">#</a>Testing / demo</h3>
+<p>Add <code>?shownew=1</code> to the URL to force every card to render as &quot;new&quot; — it shows the &quot;New to you&quot; capsules and the blinking amber dots on collapsed section headers, without reading or writing any visitor's stored state. Handy for previewing the new-content UI. Accepts <code>?shownew</code>, <code>?shownew=1</code>, or <code>?shownew=true</code>.</p>
 <h2 id="publishing-changes"><a class="anchor" href="#publishing-changes" aria-hidden="true">#</a>Publishing changes</h2>
 <p>GitHub Pages automatically rebuilds whenever you push to the <code>main</code> branch, so
 publishing a change is just a commit and a push. The helper script does both:</p>

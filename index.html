@@ -126,6 +126,15 @@
   }
   @keyframes newpulse{ 0%,100%{ opacity:1; } 50%{ opacity:.8; } }
   @media (prefers-reduced-motion: reduce){ .card .newpill{ animation:none; } }
+  /* "New in this section" header dot — flags new content while the section is collapsed */
+  .sec-head .sec-new{
+    display:inline-block; flex:0 0 auto; width:9px; height:9px;
+    border-radius:50%; background:#f59e0b; vertical-align:middle;
+    box-shadow:0 0 7px rgba(245,158,11,.65);
+  }
+  .sec-head .sec-new.flashing{ animation:sec-new-flash 1s ease-in-out 5; }
+  @keyframes sec-new-flash{ 0%,100%{ opacity:1; } 50%{ opacity:.1; } }
+  @media (prefers-reduced-motion: reduce){ .sec-head .sec-new.flashing{ animation:none; } }
   .latest{ margin:12px auto 0; font-size:.85rem; color:var(--accent); }
   .latest b{ color:var(--strong); font-weight:600; }
   .latest a{ color:var(--accent2); text-decoration:none; border-bottom:1px solid rgba(var(--accent2-rgb),.45); transition:.2s; }
@@ -249,9 +258,21 @@
       <div class="sec-head" role="button" tabindex="0" aria-expanded="false" aria-controls="grid-working-papers">
         <span class="chev" aria-hidden="true">&#9662;</span>
         <h2>AI Working Papers</h2>
-        <span class="count"><b class="num">6</b> &#183; papers &#183; audio overviews</span>
+        <span class="count"><b class="num">7</b> &#183; papers &#183; audio overviews</span>
       </div>
       <div class="grid" id="grid-working-papers">
+        <div class="card" data-id="inside-ai-hidden-thoughts" data-added="2026-07-28">
+          <span class="tag">Podcast</span>
+          <h3>Inside AI's hidden thoughts — mining for nuggets</h3>
+          <p>A Copilot AI Podcast on the nature and value of mining LLM thinking traces.</p>
+          <div class="actions">
+            <a class="btn" href="https://copilot.microsoft.com/podcasts/user/iksspLNosQid5GPaSVujj" target="_blank" rel="noopener noreferrer">Listen (Copilot) &#8599;</a>
+          </div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="inside-ai-hidden-thoughts-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="inside-ai-hidden-thoughts-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
         <div class="card" data-id="adaption-vs-adoption" data-added="2026-07-22">
           <span class="tag">Working Paper</span>
           <h3>Adaption vs. Adoption</h3>
@@ -397,9 +418,19 @@
       <div class="sec-head" role="button" tabindex="0" aria-expanded="false" aria-controls="grid-research-resources">
         <span class="chev" aria-hidden="true">&#9662;</span>
         <h2>Interesting Research and Analytics Resources</h2>
-        <span class="count"><b class="num">6</b> &#183; external &#183; reading list</span>
+        <span class="count"><b class="num">7</b> &#183; external &#183; reading list</span>
       </div>
       <div class="grid" id="grid-research-resources">
+        <div class="card gold" data-id="stanford-hai-ai-index" data-added="2026-07-28">
+          <span class="tag">Research</span>
+          <h3>Stanford HAI AI Index</h3>
+          <p>Stanford HAI's annual, data-driven report tracking AI progress — R&amp;D, technical performance, the economy, education, and policy, with global benchmarks and trends.</p>
+          <div class="actions"><a class="btn" href="https://hai.stanford.edu/ai-index" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div>
+          <div class="notebox">
+            <div class="ntoggle-row"><button type="button" class="note-toggle" aria-expanded="false" aria-controls="stanford-hai-ai-index-note" title="Add a note">&#9998;<span class="vh"> Note</span><span class="dot" aria-hidden="true"></span></button></div>
+            <div class="note-area" id="stanford-hai-ai-index-note" hidden><textarea rows="2" placeholder="Note, question, or comment — saved on this device only."></textarea></div>
+          </div>
+        </div>
         <div class="card" data-id="artificial-analysis" data-added="2026-07-22">
           <span class="tag">Benchmarks</span>
           <h3>Artificial Analysis</h3>
@@ -550,6 +581,17 @@
     function readSeen(){ try { var v = localStorage.getItem(SEEN_KEY); return v || null; } catch(e){ return null; } }
     function writeSeen(v){ try { localStorage.setItem(SEEN_KEY, v); } catch(e){} }
 
+    /* ?shownew — optional demo/test URL flag (kept permanently; harmless).
+       Forces every card to render as "new" (pill + section dot) without reading
+       or writing the stored baseline, so it never affects a real visitor's
+       state. Only activates when the URL carries ?shownew / =1 / =true. */
+    var forceNew = false;
+    try {
+      var sp = new URL(window.location.href).searchParams;
+      var fv = sp.get('shownew');
+      forceNew = fv !== null && fv !== '0' && fv !== 'false';
+    } catch(e){}
+
     var storedSeen = readSeen(); /* newest data-added we've shown this user before (ISO), or null */
 
     /* Flag anything added after the last visit's newest item.
@@ -558,7 +600,9 @@
        layer can be added later if desired. */
     cards.forEach(function(card){
       var iso = card.getAttribute('data-added');
-      if (!iso || !storedSeen || iso <= storedSeen) return;
+      if (!iso) return;
+      var isNew = forceNew || (storedSeen && iso > storedSeen);
+      if (!isNew) return;
       var el = document.createElement('span');
       el.className = 'newpill';
       el.textContent = 'New to you';
@@ -566,12 +610,15 @@
     });
 
     /* Advance the baseline to the current newest item, so pills only reappear
-       for content added after this visit. */
-    var currentMax = cards.reduce(function(m, c){
-      var iso = c.getAttribute('data-added');
-      return (iso && (!m || iso > m)) ? iso : m;
-    }, null);
-    if (currentMax && (!storedSeen || currentMax > storedSeen)) writeSeen(currentMax);
+       for content added after this visit. Skipped under ?shownew so the test
+       lever never touches real state. */
+    if (!forceNew){
+      var currentMax = cards.reduce(function(m, c){
+        var iso = c.getAttribute('data-added');
+        return (iso && (!m || iso > m)) ? iso : m;
+      }, null);
+      if (currentMax && (!storedSeen || currentMax > storedSeen)) writeSeen(currentMax);
+    }
   })();
 
   /* ---- Visited tracking (auto on link open + manual toggle) ---- */
@@ -842,6 +889,50 @@
   if (collapseAll) collapseAll.addEventListener('click', function(){
     sections.forEach(function(s){ setCollapsed(s, true); }); persistCollapse();
   });
+
+  /* ---- "New in this section" header dot (flags new content while collapsed) ---- */
+  (function(){
+    var secs = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+    if (!secs.length) return;
+    var DOT = 'sec-new';
+    var flashed = Object.create(null); /* secKey -> true once the 5-flash cycle has run this session */
+
+    function refresh(sec){
+      var head = sec.querySelector('.sec-head'); if (!head) return;
+      var h2 = head.querySelector('h2');
+      var dot = head.querySelector('.' + DOT);
+      var show = sec.classList.contains('collapsed') && !!sec.querySelector('.card .newpill');
+      if (show){
+        if (!dot){
+          dot = document.createElement('span');
+          dot.className = DOT;
+          dot.setAttribute('aria-label', 'New content in this section');
+          dot.setAttribute('title', 'New content since your last visit \u2014 open to see it');
+          head.insertBefore(dot, h2 ? h2.nextSibling : null); /* sits right after the title */
+        }
+        var key = sec.getAttribute('data-sec');
+        if (key && !flashed[key]){
+          dot.classList.add('flashing');
+          dot.addEventListener('animationend', function(){
+            dot.classList.remove('flashing');
+            flashed[key] = true;
+          }, { once:true });
+        }
+      } else if (dot){
+        dot.parentNode.removeChild(dot);
+      }
+    }
+
+    secs.forEach(refresh);
+
+    /* re-evaluate when a section's collapse state changes */
+    if (window.MutationObserver){
+      secs.forEach(function(sec){
+        new MutationObserver(function(){ refresh(sec); })
+          .observe(sec, { attributes:true, attributeFilter:['class'] });
+      });
+    }
+  })();
 
   /* ---- Per-item notes ---- */
   var notes = readJSON(NOTES_KEY);
