@@ -351,7 +351,7 @@ body.layout-email { background: #e4e4e7; }
 <body class="layout-docs">
 <div class="topbar"><span class="tb-title">OM Hub — README</span><button class="theme-toggle" type="button" aria-label="Toggle dark mode">🌙 Dark</button></div>
 <div class="docs-shell"><nav class="toc"><div class="toc-title">Contents</div><ul><li class="toc-level-1"><a href="#om-hub">OM Hub</a></li>
-<li class="toc-level-2"><a href="#adding-content-quick-cheat-sheet">Adding content — quick cheat sheet</a></li>
+<li class="toc-level-2"><a href="#adding-content-with-agent">Adding content with agent</a></li>
 <li class="toc-level-2"><a href="#live-site">Live site</a></li>
 <li class="toc-level-2"><a href="#whats-on-the-site">What's on the site</a></li>
 <li class="toc-level-2"><a href="#staying-current-date-visibility-features">Staying current: date &amp; visibility features</a></li>
@@ -368,21 +368,12 @@ body.layout-email { background: #e4e4e7; }
 <p><strong>OM Hub</strong> — a small static site on GitHub Pages. It hosts data-driven
 startup report pages and links out to a curated set of external AI showcases,
 research, and analytics resources. Every link opens in a new tab.</p>
-<h2 id="adding-content-quick-cheat-sheet"><a class="anchor" href="#adding-content-quick-cheat-sheet" aria-hidden="true">#</a>Adding content — quick cheat sheet</h2>
-<p>Everything lives in one file: <strong><code>index.html</code></strong>. Add a <code>&lt;div class=&quot;card&quot;&gt;</code> inside the chosen section&#39;s <code>.grid</code>, set two attributes, and ship.</p>
-<ol>
-<li><strong>Pick a section</strong> (<code>data-sec</code>): <code>hot-topics</code> · <code>working-papers</code> · <code>startup-reports</code> · <code>arena-showcases</code> · <code>research-resources</code>.</li>
-<li><strong>Two required attributes</strong> on the card: <code>data-id=&quot;&lt;unique-slug&gt;&quot;</code> (never rename it later) and <code>data-added=&quot;YYYY-MM-DD&quot;</code> (today). <code>data-added</code> auto-updates the &quot;Latest addition&quot; banner, the per-card &quot;Added&quot; stamp, the &quot;New to you&quot; pill, and all counts.</li>
-<li><strong>The link</strong> sits inside <code>&lt;div class=&quot;actions&quot;&gt;</code>:<ul>
-<li>external site → <code>href=&quot;https://example.com/&quot;</code></li>
-<li>local page → <code>href=&quot;Foo.html&quot;</code> (commit the file too)</li>
-</ul>
-</li>
-<li><strong>Keep in sync</strong> → the note button&#39;s <code>aria-controls=&quot;YOUR-ID-note&quot;</code> must match its <code>&lt;div class=&quot;note-area&quot; id=&quot;YOUR-ID-note&quot;&gt;</code>.</li>
-<li><strong>Bump the count</strong> → set <code>N</code> in that section&#39;s <code>&lt;span class=&quot;count&quot;&gt;&lt;b class=&quot;num&quot;&gt;N&lt;/b&gt; …&lt;/span&gt;</code> to match the number of cards.</li>
-<li><strong>Ship</strong> → <code>.\deploy.ps1 -m &quot;Add &lt;title&gt;&quot;</code>.</li>
-</ol>
-<p>Full templates, rules, and a copy-paste agent prompt live in the <strong>Adding content — full reference</strong> section below.</p>
+<h2 id="adding-content-with-agent"><a class="anchor" href="#adding-content-with-agent" aria-hidden="true">#</a>Adding content with agent</h2>
+<p>Drop new files into the repo, then paste a short prompt. The agent reads README.html and figures out the rest.</p>
+
+<blockquote>
+<p>Add the new files in the repo to index.html under the <em>section-name</em> section. Read the &quot;Adding content — full reference&quot; section of README.html for the card template and rules, then update index.html and the section count. Commit and push when done.</p>
+</blockquote>
 <h2 id="live-site"><a class="anchor" href="#live-site" aria-hidden="true">#</a>Live site</h2>
 <p><strong><a href="https://toddwmac.github.io/om-hub/">https://toddwmac.github.io/om-hub/</a></strong></p>
 <h2 id="whats-on-the-site"><a class="anchor" href="#whats-on-the-site" aria-hidden="true">#</a>What&#39;s on the site</h2>
@@ -506,9 +497,9 @@ highest-priority group); cards with no engagement are omitted.</p>
 <p><strong>Publish:</strong> a commit + push is all it takes; GitHub Pages rebuilds on push to <code>main</code>:</p>
 <pre><code class="language-powershell">.\deploy.ps1 -m &quot;Add &lt;title&gt;&quot;   # omit -m for an auto timestamp message
 </code></pre>
-<p><strong>Hand it to an agent.</strong> Copy the prompt below, fill in the <code>[...]</code> placeholders, and paste:</p>
+<p><strong>Hand it to an agent.</strong> Drop new files in the repo and paste:</p>
 <blockquote>
-<p>Add a card to the <code>[SECTION]</code> section in <code>index.html</code> (repo root). Title: <code>[CARD TITLE]</code>. URL or local file: <code>[URL]</code>. Tag: <code>[TAG]</code>. Description: <code>[1-2 SENTENCE SUMMARY]</code>. Use today&#39;s date for <code>data-added</code>, pick a unique <code>data-id</code>, and follow the full template and rules in the &quot;Adding content — full reference&quot; section of README.html — including the <code>aria-controls</code>/<code>id</code> sync, the note-area <code>id</code> convention, and the section-count update. If the card is for a local file, commit the page too. After adding the card, run <code>.\deploy.ps1 -m &quot;Add [CARD TITLE]&quot;</code> to publish.</p>
+<p>Add the new files in the repo to index.html under the <em>section-name</em> section. Read the &quot;Adding content — full reference&quot; section of README.html for the card template and rules, then update index.html and the section count. Commit and push when done.</p>
 </blockquote>
 <p>Returning visitors will see a &quot;New to you&quot; pill on a freshly added card until their next visit.</p>
 <h3 id="accessibility-resilience"><a class="anchor" href="#accessibility-resilience" aria-hidden="true">#</a>Accessibility &amp; resilience</h3>
