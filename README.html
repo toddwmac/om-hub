@@ -506,9 +506,9 @@ highest-priority group); cards with no engagement are omitted.</p>
 <p><strong>Publish:</strong> a commit + push is all it takes; GitHub Pages rebuilds on push to <code>main</code>:</p>
 <pre><code class="language-powershell">.\deploy.ps1 -m &quot;Add &lt;title&gt;&quot;   # omit -m for an auto timestamp message
 </code></pre>
-<p><strong>Hand it to an agent.</strong> Fill in the brackets and paste:</p>
+<p><strong>Hand it to an agent.</strong> Copy the prompt below, fill in the <code>[...]</code> placeholders, and paste:</p>
 <blockquote>
-<p>Add a card to the <code>&lt;data-sec&gt;</code> section in <code>index.html</code> (repo root). Title: <code>&lt;...&gt;</code>. URL: <code>&lt;...&gt;</code>. Tag: <code>&lt;...&gt;</code>. Use today&#39;s date for <code>data-added</code>, pick a unique <code>data-id</code>, and follow the &quot;Adding content — full reference&quot; section of README.html exactly — including the <code>aria-controls</code>/<code>id</code> sync and the section-count update. Leave it uncommitted, or run <code>.\deploy.ps1 -m &quot;Add &lt;title&gt;&quot;</code> to publish.</p>
+<p>Add a card to the <code>[SECTION]</code> section in <code>index.html</code> (repo root). Title: <code>[CARD TITLE]</code>. URL or local file: <code>[URL]</code>. Tag: <code>[TAG]</code>. Description: <code>[1-2 SENTENCE SUMMARY]</code>. Use today&#39;s date for <code>data-added</code>, pick a unique <code>data-id</code>, and follow the full template and rules in the &quot;Adding content — full reference&quot; section of README.html — including the <code>aria-controls</code>/<code>id</code> sync, the note-area <code>id</code> convention, and the section-count update. If the card is for a local file, commit the page too. After adding the card, run <code>.\deploy.ps1 -m &quot;Add [CARD TITLE]&quot;</code> to publish.</p>
 </blockquote>
 <p>Returning visitors will see a &quot;New to you&quot; pill on a freshly added card until their next visit.</p>
 <h3 id="accessibility-resilience"><a class="anchor" href="#accessibility-resilience" aria-hidden="true">#</a>Accessibility &amp; resilience</h3>
